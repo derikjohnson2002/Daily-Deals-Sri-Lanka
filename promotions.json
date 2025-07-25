@@ -185,5 +185,115 @@
     "terms": "Visit showroom for details.",
     "url": "https://thilakawardhana.com/",
     "category": "fashion"
+  },
+  {
+    "id": "elite-indian-special",
+    "shopName": "Elite Indian",
+    "logo": "./images/elite_indian_logo.png",
+    "title": "Elite Indian: Daily Lunch Specials",
+    "description": "Enjoy authentic Indian cuisine with our rotating daily lunch specials.",
+    "validity": "Ongoing",
+    "terms": "Dine-in only. Menu changes daily.",
+    "url": "https://www.tripadvisor.com/Restaurant_Review-g293962-d12115565-Reviews-Elite_Indian_Restaurant-Colombo_Western_Province.html",
+    "category": "food"
+  },
+  {
+    "id": "almas-restaurant-family",
+    "shopName": "Almas Restaurant",
+    "logo": "./images/almas_restaurant_logo.png",
+    "title": "Almas Restaurant: Weekend Family Platters",
+    "description": "Generous family platters perfect for sharing. Serves 4-6.",
+    "validity": "Weekends only",
+    "terms": "Pre-booking recommended. Limited availability.",
+    "url": "https://almaas.lk/",
+    "category": "food"
+  },
+  {
+    "id": "big-plate-express-lunch",
+    "shopName": "Big Plate",
+    "logo": "./images/big_plate_logo.png",
+    "title": "Big Plate: Express Lunch Combos",
+    "description": "Quick and delicious lunch combos for your busy day.",
+    "validity": "Weekdays 12 PM - 3 PM",
+    "terms": "Dine-in/Takeaway. Check daily specials.",
+    "url": "https://www.facebook.com/Bigplatelk/",
+    "category": "food"
+  },
+  {
+    "id": "street-burger-value",
+    "shopName": "Street Burger",
+    "logo": "./images/street_burger_logo.png",
+    "title": "Street Burger: Value Burger Deals",
+    "description": "Great prices on selected burgers and sides.",
+    "validity": "All day, every day",
+    "terms": "Limited time offer. Participating outlets.",
+    "url": "https://streetburger.lk/",
+    "category": "food"
+  },
+  {
+    "id": "la-luna-cafe-offer",
+    "shopName": "La Luna",
+    "logo": "./images/la_luna_logo.png",
+    "title": "La Luna: Evening Cafe Delights",
+    "description": "Special offers on our coffee and dessert pairings after 6 PM.",
+    "validity": "Daily, 6 PM onwards",
+    "terms": "Dine-in only.",
+    "url": "https://www.instagram.com/la_luna.cmb/",
+    "category": "food"
+  },
+  {
+    "id": "mc-donalds-happy-meal",
+    "shopName": "McDonald's",
+    "logo": "./images/mcdonalds_logo.png",
+    "title": "McDonald's: Happy Meal Surprises",
+    "description": "Enjoy special discounts on Happy Meals with new toys.",
+    "validity": "Ongoing",
+    "terms": "Check in-store for latest toy collection.",
+    "url": "https://www.mcdonalds.com/us/en-us.html",
+    "category": "food"
+  },
+  {
+    "id": "burleys-bbq-night",
+    "shopName": "Burleys",
+    "logo": "./images/burleys_logo.png",
+    "title": "Burleys: BBQ Night Specials",
+    "description": "Indulge in delicious BBQ platters every weekend.",
+    "validity": "Friday & Saturday nights",
+    "terms": "Reservations recommended.",
+    "url": "https://www.facebook.com/burleysfoods/",
+    "category": "food"
+  },
+  {
+    "id": "up-down-kandy-style",
+    "shopName": "Up Down Kandy",
+    "logo": "./images/up_down_kandy_logo.png",
+    "title": "Up Down Kandy: New Arrivals Discount",
+    "description": "Be the first to get 10% off on our latest fashion collection.",
+    "validity": "Limited time",
+    "terms": "Selected items only. In-store only.",
+    "url": "https://uptownsrilanka.com/",
+    "category": "fashion"
+  },
+  {
+    "id": "zigzag-online-exclusive",
+    "shopName": "Zig Zag",
+    "logo": "./images/zigzag_logo.png",
+    "title": "Zig Zag: Online Exclusive Offers",
+    "description": "Special discounts only available for online purchases.",
+    "validity": "Ongoing online",
+    "terms": "Applies to non-sale items."
+    "url": "https://zigzag.lk/",
+    "category": "fashion"
+  },
+  {
+    "id": "adidas-sportswear-sale",
+    "shopName": "Adidas",
+    "logo": "./images/adidas_logo.png",
+    "title": "Adidas: Sportswear Clearance",
+    "description": "Huge savings on performance wear, shoes, and accessories.",
+    "validity": "While stocks last",
+    "terms": "Selected models and sizes.",
+    "url": "https://odel.lk/adidas/br/189",
+    "category": "fashion"
   }
 ]
