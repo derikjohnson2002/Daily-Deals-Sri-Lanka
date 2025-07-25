@@ -79,7 +79,7 @@
         }
 
         /* Hide the restaurant-section H2s, as the deal-grid will show the cards directly.
-           (You don't have these specific H2s in the dynamic version, but good to keep if you add them) */
+            (You don't have these specific H2s in the dynamic version, but good to keep if you add them) */
         .restaurant-section h2 {
             display: none; /* Hide these individual shop titles */
         }
@@ -111,8 +111,7 @@
         }
 
         /* Buttons Hover Effect (already somewhat there, but enhance) */
-        #searchButton:hover,
-        .sign-in-btn:hover {
+        #searchButton:hover { /* Removed .sign-in-btn as it's removed */
             transform: translateY(-2px); /* Slight lift */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
             opacity: 0.9; /* Slightly less opaque */
@@ -140,8 +139,7 @@
                         <input type="search" id="dealSearch" placeholder="Search deals..." aria-label="Search deals" class="p-2 rounded-l-md border border-black-pure focus:outline-none focus:ring-2 focus:ring-black-pure flex-grow bg-white-pure text-black-pure transition-all-ease">
                         <button type="submit" id="searchButton" class="bg-black-pure hover:bg-light-grey text-white-pure p-2 rounded-r-md font-semibold transition-all-ease">Search</button>
                     </div>
-                    <a href="#" class="sign-in-btn bg-black-pure text-white-pure hover:bg-light-grey hover:text-black-pure py-2 px-4 rounded-md font-semibold transition-all-ease text-center">Sign In / Register</a>
-                </div>
+                    </div>
             </div>
         </header>
 
@@ -153,9 +151,7 @@
         </nav>
     </div>
 
-    <main class="container mx-auto px-4 py-8">
-        <section class="category-title mb-8" id="food-deals">
-            <h2 class="text-3xl font-bold text-black-pure border-b-2 border-black-pure pb-2">Food Deals</h2>
+    <main class="container mx-auto px-4 pt-16 pb-8 max-w-5xl"> <section class="category-title mb-8 mt-8" id="food-deals"> <h2 class="text-3xl font-bold text-black-pure border-b-2 border-black-pure pb-2">Food Deals</h2>
         </section>
 
         <div id="food-deals-grid" class="deal-grid">
@@ -223,7 +219,7 @@
                 fashionGrid.innerHTML = ''; // Ensure fashion grid is also empty
                 return; // Exit the function as nothing to render
             } else if (promosToRender.length === 0 && searchInput.value.trim() === '') {
-                 // If no deals exist at all (e.g., empty JSON)
+                    // If no deals exist at all (e.g., empty JSON)
                 foodGrid.innerHTML = '<p class="text-dark-grey col-span-full text-center">No food deals available at the moment. Check back soon!</p>';
                 fashionGrid.innerHTML = '<p class="text-dark-grey col-span-full text-center">No fashion deals available at the moment. Check back soon!</p>';
                 return;
