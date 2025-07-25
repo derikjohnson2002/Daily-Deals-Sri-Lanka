@@ -1,0 +1,189 @@
+[
+  {
+    "id": "pizza-hut-bogo",
+    "shopName": "Pizza Hut",
+    "logo": "./images/pizza hut.png",
+    "title": "Pizza Hut Promotions: Buy One Get One Free Pizza",
+    "description": "Valid on Large Pan Pizzas. Excludes Supreme & Seafood.",
+    "validity": "Until July 31st, 2025",
+    "terms": "Terms apply. Dine-in and Takeaway only. Colombo outlets.",
+    "url": "https://www.pizzahut.lk/",
+    "category": "food"
+  },
+  {
+    "id": "kfc-combo",
+    "shopName": "KFC",
+    "logo": "./images/KFC.png",
+    "title": "KFC Promotions: Zinger Combo Meal Discount",
+    "description": "Get Rs. 150 off on Zinger Combo Meal. Valid on app orders.",
+    "validity": "Weekdays, 11 AM - 3 PM",
+    "terms": "Available at selected outlets. Limited time offer.",
+    "url": "https://www.kfc.lk/",
+    "category": "food"
+  },
+  {
+    "id": "taco-bell-tuesday",
+    "shopName": "Taco Bell",
+    "logo": "./images/taco bell.png",
+    "title": "Taco Bell Promotions: Taco Tuesday Special",
+    "description": "Buy any 2 Tacos, get 1 free! Mix & Match.",
+    "validity": "Every Tuesday in July 2025",
+    "terms": "Dine-in only. All Colombo branches.",
+    "url": "https://www.tacobell.com/",
+    "category": "food"
+  },
+  {
+    "id": "subway-feast",
+    "shopName": "Subway",
+    "logo": "./images/subway.png",
+    "title": "Subway Promotions: Footlong Feast Deal",
+    "description": "Get a Footlong sub, drink, and cookie for Rs. 1200.",
+    "validity": "Ongoing offer",
+    "terms": "Participating outlets only. Check in-store for details.",
+    "url": "https://www.subway.com/en-AU/Promotions",
+    "category": "food"
+  },
+  {
+    "id": "vitos-family",
+    "shopName": "Vito's Pizza",
+    "logo": "./images/vitos pizza.png",
+    "title": "Vito's Pizza Promotions: Weekend Family Combo",
+    "description": "2 Large Pizzas, Garlic Bread, and 1.5L drink for Rs. 4500.",
+    "validity": "Saturdays & Sundays in July 2025",
+    "terms": "Delivery only. Call to order.",
+    "url": "https://www.ubereats.com/lk/store/vito-wood-fired-pizza-colombo-07/znaKJhuuXVuX62EnGteyIQ",
+    "category": "food"
+  },
+  {
+    "id": "burger-king-whopper",
+    "shopName": "Burger King",
+    "logo": "./images/bk.png",
+    "title": "Burger King Promotions: Whopper Wednesday",
+    "description": "Buy one Whopper, get second 50% off.",
+    "validity": "Every Wednesday",
+    "terms": "Dine-in/Takeaway. Check participating outlets.",
+    "url": "https://slashdeals.lk/vendor/burger-king",
+    "category": "food"
+  },
+  {
+    "id": "popeyes-feast",
+    "shopName": "Popeyes",
+    "logo": "./images/Popeyes.png",
+    "title": "Popeyes Promotions: Louisiana Fried Chicken Feast",
+    "description": "8pc Chicken, 2 Large Sides, 4 Biscuits for Rs. 3800.",
+    "validity": "Limited time offer",
+    "terms": "Subject to availability.",
+    "url": "https://www.ubereats.com/lk/store/popeyes-mount-lavinia/tgSYqD5HStKkVsrW9i4KSg",
+    "category": "food"
+  },
+  {
+    "id": "dominos-edv",
+    "shopName": "Domino's Pizza",
+    "logo": "./images/dominos.png",
+    "title": "Domino's Pizza Promotions: Every Day Value (EDV) Deals",
+    "description": "Various combo deals available daily. Check website for specifics.",
+    "validity": "Ongoing",
+    "terms": "Prices and offers may vary by outlet.",
+    "url": "https://www.dominos.lk/edv",
+    "category": "food"
+  },
+  {
+    "id": "land-of-kings-buffet",
+    "shopName": "Land of Kings",
+    "logo": "./images/lano of kings.png",
+    "title": "Land of Kings Promotions: Special Lunch Buffet",
+    "description": "All-you-can-eat Sri Lankan buffet for Rs. 1800.",
+    "validity": "Weekdays, 12 PM - 3 PM",
+    "terms": "Reservations recommended.",
+    "url": "https://landofkingscafe.com/product-category/special-offers/",
+    "category": "food"
+  },
+  {
+    "id": "chinese-dragon-family",
+    "shopName": "Chinese Dragon Cafe",
+    "logo": "./images/chinese dragon.png",
+    "title": "Chinese Dragon Cafe Promotions: Family Dinner Pack",
+    "description": "Special family meal for 4-5 people with 4 main dishes, rice/noodles.",
+    "validity": "Ongoing",
+    "terms": "Delivery and Takeaway only.",
+    "url": "https://www.chinesedragoncafe.com/pages/promotions",
+    "category": "food"
+  },
+  {
+    "id": "odel-seasonal",
+    "shopName": "Odel",
+    "logo": "./images/aodel.png",
+    "title": "Odel Promotions: Seasonal Sale",
+    "description": "Up to 30% off on selected fashion and accessories.",
+    "validity": "August 1st - 15th, 2025",
+    "terms": "In-store and online. Terms and conditions apply.",
+    "url": "https://www.odel.lk/",
+    "category": "fashion"
+  },
+  {
+    "id": "nolimit-new-collection",
+    "shopName": "NoLimit",
+    "logo": "./images/anolimit.png",
+    "title": "NoLimit Promotions: New Collection Discount",
+    "description": "15% off on all new arrivals for loyalty members.",
+    "validity": "Entire month of August 2025",
+    "terms": "Show loyalty card at checkout.",
+    "url": "https://nolimit.lk/",
+    "category": "fashion"
+  },
+  {
+    "id": "mimosa-back-to-school",
+    "shopName": "Mimosa",
+    "logo": "./images/amimosa.png",
+    "title": "Mimosa Promotions: Back to School Offers",
+    "description": "Special discounts on kids' wear and school uniforms.",
+    "validity": "Until August 31st, 2025",
+    "terms": "Selected items only.",
+    "url": "https://mimosaclothingindia.com/",
+    "category": "fashion"
+  },
+  {
+    "id": "kelly-felder-online",
+    "shopName": "Kelly Felder",
+    "logo": "./images/akelly felder.png",
+    "title": "Kelly Felder Promotions: Exclusive Online Discount",
+    "description": "20% off your first online order. Use code: KF2025.",
+    "validity": "Ongoing online offer",
+    "terms": "New customers only. Excludes sale items.",
+    "url": "https://kellyfelder.com/",
+    "category": "fashion"
+  },
+  {
+    "id": "fashion-bug-clearance",
+    "shopName": "Fashion Bug",
+    "logo": "./images/afashion bug.png",
+    "title": "Fashion Bug Promotions: Mega Clearance Sale",
+    "description": "Up to 50% off on men's, women's, and kids' clothing.",
+    "validity": "While stocks last",
+    "terms": "All outlets participating.",
+    "url": "https://fashionbug.lk/",
+    "category": "fashion"
+  },
+  {
+    "id": "cool-planet-mid-season",
+    "shopName": "Cool Planet",
+    "logo": "./images/acool planet.png",
+    "title": "Cool Planet Promotions: Mid-Season Extravaganza",
+    "description": "Great deals on casual wear and accessories.",
+    "validity": "Until end of July 2025",
+    "terms": "Selected items.",
+    "url": "https://www.coolplanet.lk/",
+    "category": "fashion"
+  },
+  {
+    "id": "thilakawardhana-wedding",
+    "shopName": "Thilakawardhana Textiles",
+    "logo": "./images/athilaka.png",
+    "title": "Thilakawardhana Textiles Promotions: Wedding & Occasion Wear Discounts",
+    "description": "Special prices on sarees, national wear, and formal attire.",
+    "validity": "Limited period",
+    "terms": "Visit showroom for details.",
+    "url": "https://thilakawardhana.com/",
+    "category": "fashion"
+  }
+]

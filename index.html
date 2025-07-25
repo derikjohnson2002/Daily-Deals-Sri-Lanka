@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Lanka Deals Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom Colors: White Canvas Palette */
+        .bg-black-pure { background-color: #000000; }
+        .text-black-pure { color: #000000; }
+
+        .bg-white-pure { background-color: #FFFFFF; }
+        .text-white-pure { color: #FFFFFF; }
+
+        .border-light-grey { border-color: #E0E0E0; }
+        .text-dark-grey { color: #555555; }
+
+        /* General Body Text - Default to pure black for readability on white background */
+        body {
+            color: #000000; /* Pure black for general text on white background */
+        }
+
+        /* Fixed Header/Nav specific styles */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure it stays on top of other content */
+        }
+
+        /* Add padding to the body to prevent content from hiding under the fixed header */
+        body {
+            padding-top: 156px; /* Adjust this value based on the total height of your fixed header and nav */
+        }
+
+        /* Make the main-nav sticky to stay below the header */
+        .main-nav {
+            position: sticky;
+            top: 100px; /* This should be the height of your header + any desired gap */
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            /* Adjust padding for smaller screens if header height changes */
+            body {
+                padding-top: 200px; /* Example: if header becomes taller on mobile */
+            }
+            /* Adjust top for main-nav for smaller screens if header height changes */
+            .main-nav {
+                top: 170px; /* Example: height of header on mobile */
+            }
+        }
+
+        /* Custom style for the grid container to ensure responsiveness */
+        .deal-grid {
+            display: grid;
+            gap: 1.5rem; /* Gap between grid items (promotion cards) */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Default to single column or fit as many as possible */
+        }
+
+        /* For larger screens, explicitly set to 2 columns */
+        @media (min-width: 768px) { /* Medium screens and up */
+            .deal-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns */
+            }
+        }
+
+        /* Optional: For very large screens, consider 3 columns */
+        @media (min-width: 1200px) { /* Adjust breakpoint as needed for 3 columns */
+            .deal-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            }
+        }
+
+        /* Ensure category titles span full width in the grid context if they were direct children of the grid */
+        .category-title {
+            grid-column: 1 / -1; /* This makes the element span all columns */
+        }
+
+        /* Hide the restaurant-section H2s, as the deal-grid will show the cards directly.
+           (You don't have these specific H2s in the dynamic version, but good to keep if you add them) */
+        .restaurant-section h2 {
+            display: none; /* Hide these individual shop titles */
+        }
+
+        /* --- Hover/Focus Effects --- */
+
+        /* General transition for smooth effects */
+        .transition-all-ease {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Promotion Card Hover Effect (Float + Shadow) */
+        .promotion-card {
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .promotion-card:hover {
+            transform: translateY(-5px); /* Slightly move up */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+            border-color: #000000; /* Border becomes black on hover */
+        }
+
+        /* Navigation Links Hover Effect */
+        .main-nav ul li a:hover {
+            color: #000000; /* Black text on hover (already black, but good for consistency) */
+            background-color: #E0E0E0; /* Light grey background on hover */
+            padding-left: 0.75rem; /* Add some padding effect */
+            padding-right: 0.75rem;
+            border-radius: 0.25rem; /* Slightly rounded corners */
+        }
+
+        /* Buttons Hover Effect (already somewhat there, but enhance) */
+        #searchButton:hover,
+        .sign-in-btn:hover {
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            opacity: 0.9; /* Slightly less opaque */
+        }
+
+        /* Search Input Focus Effect */
+        #dealSearch:focus {
+            outline: none; /* Remove default outline */
+            border-color: #000000; /* Black border on focus */
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Outer glow effect */
+        }
+    </style>
+</head>
+<body class="font-sans bg-white-pure text-black-pure">
+    <div class="fixed-header">
+        <header class="bg-black-pure text-white-pure p-6 shadow-md">
+            <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h1 class="text-4xl font-bold mb-1 text-white-pure">Daily Deals Sri Lanka</h1>
+                    <p class="text-white-pure text-lg">Your go-to source for the best food & fashion promotions today!</p>
+                </div>
+
+                <div class="header-actions flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full md:w-auto">
+                    <div class="search-bar flex w-full sm:w-auto">
+                        <input type="search" id="dealSearch" placeholder="Search deals..." aria-label="Search deals" class="p-2 rounded-l-md border border-black-pure focus:outline-none focus:ring-2 focus:ring-black-pure flex-grow bg-white-pure text-black-pure transition-all-ease">
+                        <button type="submit" id="searchButton" class="bg-black-pure hover:bg-light-grey text-white-pure p-2 rounded-r-md font-semibold transition-all-ease">Search</button>
+                    </div>
+                    <a href="#" class="sign-in-btn bg-black-pure text-white-pure hover:bg-light-grey hover:text-black-pure py-2 px-4 rounded-md font-semibold transition-all-ease text-center">Sign In / Register</a>
+                </div>
+            </div>
+        </header>
+
+        <nav class="main-nav bg-white-pure text-black-pure p-4 shadow-md">
+            <ul class="container mx-auto flex justify-center space-x-6">
+                <li><a href="#food-deals" class="hover:text-dark-grey transition-all-ease text-lg p-2 block">Food Deals</a></li>
+                <li><a href="#fashion-deals" class="hover:text-dark-grey transition-all-ease text-lg p-2 block">Fashion & Clothing</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="category-title mb-8" id="food-deals">
+            <h2 class="text-3xl font-bold text-black-pure border-b-2 border-black-pure pb-2">Food Deals</h2>
+        </section>
+
+        <div id="food-deals-grid" class="deal-grid">
+            </div>
+
+        <section class="category-title mb-8 mt-12" id="fashion-deals">
+            <h2 class="text-3xl font-bold text-black-pure border-b-2 border-black-pure pb-2">Fashion & Clothing Deals</h2>
+        </section>
+
+        <div id="fashion-deals-grid" class="deal-grid">
+            </div>
+    </main>
+
+    <footer class="bg-black-pure text-white-pure p-6 text-center text-sm mt-8">
+        <p class="container mx-auto">&copy; 2025 Sri Lanka Deals. All promotions are subject to change by the respective store without notice. Please verify details on the official website before visiting.</p>
+    </footer>
+
+    <script>
+        // Store all promotions in a variable once fetched for search functionality
+        let allPromotionsData = [];
+        let lastFetchedData = ''; // To store the stringified version of the last fetched data for comparison
+
+        // Function to fetch and display promotions
+        async function fetchAndDisplayPromotions() {
+            try {
+                // Fetch the JSON data from your local file
+                const response = await fetch('promotions.json'); // THIS IS THE KEY CONNECTION
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const promotions = await response.json();
+
+                // Convert the new data to a string for comparison
+                const currentDataString = JSON.stringify(promotions);
+
+                // Check if data has actually changed before re-rendering
+                if (currentDataString !== lastFetchedData) {
+                    allPromotionsData = promotions; // Update the global data
+                    renderPromotions(allPromotionsData); // Re-render only if data changed
+                    lastFetchedData = currentDataString; // Update the last fetched data string
+                    console.log('Promotions updated from JSON.'); // Log when an update occurs
+                } else {
+                    console.log('No new promotion data. Skipping re-render.'); // Log if no change
+                }
+
+            } catch (error) {
+                console.error('Error fetching or parsing promotions:', error);
+                // Display user-friendly error messages if deals can't be loaded
+                document.getElementById('food-deals-grid').innerHTML = '<p class="text-dark-grey col-span-full text-center">Could not load food deals. Please try again later.</p>';
+                document.getElementById('fashion-deals-grid').innerHTML = '<p class="text-dark-grey col-span-full text-center">Could not load fashion deals. Please try again later.</p>';
+            }
+        }
+
+        // Function to render promotions into the respective grids
+        function renderPromotions(promosToRender) {
+            const foodGrid = document.getElementById('food-deals-grid');
+            const fashionGrid = document.getElementById('fashion-deals-grid');
+
+            foodGrid.innerHTML = ''; // Clear existing content
+            fashionGrid.innerHTML = ''; // Clear existing content
+
+            // Handle cases where no deals are found (e.g., after a search)
+            if (promosToRender.length === 0 && searchInput.value.trim() !== '') {
+                foodGrid.innerHTML = '<p class="text-dark-grey col-span-full text-center">No deals found matching your search criteria.</p>';
+                fashionGrid.innerHTML = ''; // Ensure fashion grid is also empty
+                return; // Exit the function as nothing to render
+            } else if (promosToRender.length === 0 && searchInput.value.trim() === '') {
+                 // If no deals exist at all (e.g., empty JSON)
+                foodGrid.innerHTML = '<p class="text-dark-grey col-span-full text-center">No food deals available at the moment. Check back soon!</p>';
+                fashionGrid.innerHTML = '<p class="text-dark-grey col-span-full text-center">No fashion deals available at the moment. Check back soon!</p>';
+                return;
+            }
+
+
+            promosToRender.forEach(promo => {
+                const card = document.createElement('div');
+                card.className = "promotion-card bg-white-pure rounded-lg shadow-md p-6 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 border border-light-grey transition-all-ease";
+                card.setAttribute('data-url', promo.url);
+                card.setAttribute('tabindex', '0'); // Make card focusable for keyboard navigation
+                card.setAttribute('role', 'link'); // Indicate it's a link
+                card.setAttribute('aria-label', `View ${promo.shopName} Deal: ${promo.title}`); // Accessibility for screen readers
+
+                card.innerHTML = `
+                    <img src="${promo.logo}" alt="${promo.shopName} Logo" class="restaurant-logo w-24 h-24 object-contain flex-shrink-0">
+                    <div class="promotion-details flex-grow text-center sm:text-left">
+                        <h3 class="text-xl font-bold text-black-pure mb-1">${promo.title}</h3>
+                        <p class="description text-dark-grey mb-1">${promo.description}</p>
+                        <p class="validity text-sm text-black-pure font-medium mb-1">Valid: ${promo.validity}</p>
+                        <p class="terms text-xs text-dark-grey mb-3">Terms: ${promo.terms}</p>
+                    </div>
+                `;
+
+                // Add event listeners for click and keyboard interaction to the dynamically created card
+                card.addEventListener('click', function() {
+                    window.open(promo.url, '_blank'); // Opens URL in a new tab
+                });
+                card.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' || event.keyCode === 13) { // 'Enter' key
+                        window.open(promo.url, '_blank');
+                    }
+                });
+
+                // Append the card to the correct category grid
+                if (promo.category === 'food') {
+                    foodGrid.appendChild(card);
+                } else if (promo.category === 'fashion') {
+                    fashionGrid.appendChild(card);
+                }
+            });
+        }
+
+
+        // Smooth scrolling for anchor links in the navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default jump behavior
+
+                // Scroll to the target element smoothly
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Search Functionality
+        const searchInput = document.getElementById('dealSearch');
+        const searchButton = document.getElementById('searchButton');
+
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let filteredPromotions = [];
+
+            if (searchTerm === '') {
+                // If search input is empty, display all promotions
+                filteredPromotions = allPromotionsData;
+            } else {
+                // Filter the allPromotionsData array (which holds data from JSON)
+                filteredPromotions = allPromotionsData.filter(promo => {
+                    // Combine relevant text fields for searching
+                    const searchableText = `${promo.shopName} ${promo.title} ${promo.description} ${promo.validity} ${promo.terms}`.toLowerCase();
+                    return searchableText.includes(searchTerm);
+                });
+            }
+            renderPromotions(filteredPromotions); // Re-render the grids with the filtered data
+        }
+
+        // Attach event listeners for search
+        searchButton.addEventListener('click', performSearch); // Search on button click
+        searchInput.addEventListener('keyup', (event) => {
+            performSearch(); // Live search as user types and also on 'Enter' key press
+        });
+        searchInput.addEventListener('input', () => {
+             if (searchInput.value.trim() === '') {
+                renderPromotions(allPromotionsData); // If search input is cleared, show all promotions again
+            }
+        });
+
+
+        // Initial load of promotions when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAndDisplayPromotions(); // Perform initial fetch of data
+            // Set up polling to fetch data every 10 seconds (10000 milliseconds)
+            // Adjust the interval (e.g., 5000 for 5 seconds, 30000 for 30 seconds) as needed.
+            setInterval(fetchAndDisplayPromotions, 10000);
+        });
+    </script>
+</body>
+</html>
