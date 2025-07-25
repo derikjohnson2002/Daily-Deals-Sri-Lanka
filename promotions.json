@@ -281,7 +281,7 @@
     "title": "Zig Zag: Online Exclusive Offers",
     "description": "Special discounts only available for online purchases.",
     "validity": "Ongoing online",
-    "terms": "Applies to non-sale items."
+    "terms": "Applies to non-sale items.", <-- ADDED COMMA HERE
     "url": "https://zigzag.lk/",
     "category": "fashion"
   },
