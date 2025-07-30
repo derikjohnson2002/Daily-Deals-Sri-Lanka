@@ -13,7 +13,8 @@
             --color-white-pure: #FFFFFF;
             --color-light-grey: #E0E0E0;
             --color-dark-grey: #555555;
-            --color-blue-accent: #007bff; /* Added for 'view more' link */
+            --color-blue-accent: #007bff;
+            --color-red-error: #dc3545; /* For "No Offers" badge */
         }
 
         .bg-black-pure { background-color: var(--color-black-pure); }
@@ -22,14 +23,14 @@
         .text-white-pure { color: var(--color-white-pure); }
         .border-light-grey { border-color: var(--color-light-grey); }
         .text-dark-grey { color: var(--color-dark-grey); }
-        .text-blue-accent { color: var(--color-blue-accent); } /* Added */
+        .text-blue-accent { color: var(--color-blue-accent); }
+        .bg-red-error { background-color: var(--color-red-error); } /* For "No Offers" badge */
 
         /* General Body Text - Default to pure black for readability on white background */
         body {
             font-family: 'Poppins', sans-serif;
             color: var(--color-black-pure);
-            /* padding-top will be set by JavaScript dynamically */
-            transition: padding-top 0.3s ease-in-out; /* Smooth transition for padding */
+            transition: padding-top 0.3s ease-in-out;
         }
 
         /* Fixed Header/Nav specific styles */
@@ -38,21 +39,21 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            background-color: var(--color-white-pure); /* Ensure background is white when shrinking */
-            transition: all 0.3s ease-in-out; /* Smooth transitions for header changes */
-            overflow: hidden; /* Hide overflowing content when shrinking */
+            background-color: var(--color-white-pure);
+            transition: all 0.3s ease-in-out;
+            overflow: hidden;
         }
 
         .fixed-header header {
             background-color: var(--color-black-pure);
-            transition: padding 0.3s ease-in-out; /* Smooth transition for header padding */
+            transition: padding 0.3s ease-in-out;
         }
 
         .fixed-header .main-nav {
             position: relative;
             top: auto;
             z-index: 999;
-            transition: all 0.3s ease-in-out; /* Smooth transition for nav changes */
+            transition: all 0.3s ease-in-out;
         }
 
         .fixed-header .header-content {
@@ -104,7 +105,7 @@
         @media (max-width: 768px) {
             .fixed-header.header-scrolled {
                 height: auto;
-                min-height: 60px; /* Minimum height for the entire fixed-header */
+                min-height: 60px;
             }
 
             .fixed-header.header-scrolled header {
@@ -120,7 +121,7 @@
                 margin-bottom: 0;
             }
 
-            .fixed-header.header-scrolled .header-top .relative,
+            .fixed-header.header-scrolled .header-top .search-container,
             .fixed-header.header-scrolled .header-top #searchButton,
             .fixed-header.header-scrolled .header-top .sign-in-btn {
                 opacity: 0;
@@ -141,7 +142,7 @@
             }
 
             body.header-scrolled {
-                padding-top: 60px !important; /* Important to override dynamic setting */
+                padding-top: 60px !important;
             }
         }
 
@@ -149,7 +150,7 @@
         /* Custom style for the grid container to ensure responsiveness */
         .deal-grid {
             display: grid;
-            gap: 1.5rem; /* Gap between grid items (promotion cards) */
+            gap: 1.5rem;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         }
 
@@ -180,11 +181,13 @@
 
         /* Card for individual promotions or summary cards */
         .promo-card {
+            position: relative; /* Needed for the "no offers" badge */
             cursor: pointer;
             border-radius: 0.5rem;
             border: 1px solid var(--color-light-grey);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease-in-out;
+            overflow: hidden; /* Ensures the badge doesn't overflow corners */
         }
         .promo-card:hover {
             transform: translateY(-5px);
@@ -212,6 +215,13 @@
             border-radius: 0.25rem;
         }
 
+        /* Highlight for active category link */
+        .main-nav ul li a.bg-light-grey {
+            color: var(--color-black-pure);
+            background-color: var(--color-light-grey);
+            font-weight: 600; /* Make it a bit bolder when active */
+        }
+
         #searchButton:hover,
         .sign-in-btn:hover {
             transform: translateY(-2px);
@@ -224,6 +234,45 @@
             border-color: var(--color-black-pure);
             box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
         }
+
+        /* Search clear button styles */
+        .search-clear-btn {
+            position: absolute;
+            right: 8px; /* Adjusted to be inside padding of text */
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--color-dark-grey);
+            display: none; /* Hidden by default */
+            z-index: 10;
+        }
+        .search-clear-btn:hover {
+            color: var(--color-black-pure);
+        }
+
+        /* "No Offers" Badge Style */
+        .no-offers-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--color-red-error);
+            color: var(--color-white-pure);
+            padding: 0.25rem 2rem; /* Adjusted padding for stripe effect */
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transform: rotate(45deg);
+            transform-origin: 100% 0%; /* Rotate from top-right corner */
+            width: 150px; /* Adjust width to cover corner nicely */
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            /* Calculate offset to make it look like it's coming from the corner */
+            /* Using calc to position it slightly off the edge so the full width is seen */
+            right: -65px; /* Adjust this value as needed to fine-tune position */
+            top: 15px; /* Adjust this value as needed */
+        }
+
     </style>
 </head>
 <body class="bg-white-pure">
@@ -231,15 +280,19 @@
         <header class="bg-black-pure text-white-pure p-4 shadow-md">
             <div class="container mx-auto flex flex-col md:flex-row items-center justify-between header-top">
                 <div class="text-2xl font-bold mb-4 md:mb-0">Daily Deals Sri Lanka</div>
-                <div class="relative w-full md:w-1/3">
+                <div class="relative w-full md:w-1/3 search-container">
                     <input type="text" id="dealSearch" placeholder="Search for deals..."
                            class="w-full p-2 pl-10 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-black-pure">
                     <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
+                    <button id="searchClearButton" class="search-clear-btn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
                 </div>
-                <button id="searchButton" class="bg-blue-accent text-white-pure px-4 py-2 rounded-lg ml-0 md:ml-4 mt-4 md:mt-0 transition-all-ease">Search</button>
-                <button class="sign-in-btn bg-dark-grey text-white-pure px-4 py-2 rounded-lg ml-0 md:ml-4 mt-4 md:mt-0 transition-all-ease">Sign In</button>
+                <button id="searchButton" class="bg-blue-accent text-white-pure px-4 py-2 rounded-lg ml-2 md:ml-2 mt-4 md:mt-0 transition-all-ease">Search</button> <button class="sign-in-btn bg-dark-grey text-white-pure px-4 py-2 rounded-lg ml-0 md:ml-4 mt-4 md:mt-0 transition-all-ease">Sign In</button>
             </div>
         </header>
 
@@ -262,7 +315,7 @@
     </main>
 
     <footer class="bg-black-pure text-white-pure p-6 text-center mt-8">
-        <p>&copy; 2025 Daily Deals Sri Lanka. All rights reserved.</p>
+        <p>&copy; 2025 Daily Deals Sri Lanka. Created by SPG Holdings. All rights reserved.</p>
     </footer>
 
     <script>
@@ -831,7 +884,7 @@
                 "promotions": [
                     {
                         "id": "up-down-kandy-style",
-                        "title": "New Arrivals Discount",
+                        "title": "No Offers",
                         "description": "Be the first to get 10% off on our latest fashion collection.",
                         "validity": "Limited time",
                         "terms": "Selected items only. In-store only.",
@@ -879,6 +932,7 @@
         const categoryLinks = document.querySelectorAll('.category-link');
         const dealSearchInput = document.getElementById('dealSearch');
         const searchButton = document.getElementById('searchButton');
+        const searchClearButton = document.getElementById('searchClearButton'); // New
         const fixedHeader = document.querySelector('.fixed-header');
         const body = document.body;
         const mainNav = document.querySelector('.main-nav');
@@ -886,16 +940,25 @@
         let lastScrollTop = 0;
 
         function setBodyPadding() {
-            // Get the current computed height of the fixed header
             const headerHeight = fixedHeader.offsetHeight;
-            // Apply this height as padding to the body
             body.style.paddingTop = `${headerHeight}px`;
         }
 
-        function renderPromotions(filteredPromotions) {
-            promotionsList.innerHTML = ''; // Clear previous content
+        function hasNoOffers(shop) {
+            // Check mainPromoTitle
+            if (shop.mainPromoTitle && shop.mainPromoTitle.toLowerCase().includes('no offers')) {
+                return true;
+            }
+            // Check individual promotions
+            return shop.promotions.some(promo =>
+                (promo.title && promo.title.toLowerCase().includes('no offers')) ||
+                (promo.description && promo.description.toLowerCase().includes('no offers'))
+            );
+        }
 
-            // Group promotions by category for display
+        function renderPromotions(filteredPromotions) {
+            promotionsList.innerHTML = '';
+
             const categories = {};
             filteredPromotions.forEach(shop => {
                 if (!categories[shop.category]) {
@@ -919,7 +982,15 @@
                 categories[category].forEach(shop => {
                     const promoCard = document.createElement('div');
                     promoCard.className = 'promo-card bg-white-pure p-6 rounded-lg shadow-md transition-all-ease flex flex-col items-center text-center';
+
+                    let noOffersBadge = '';
+                    if (hasNoOffers(shop)) {
+                        promoCard.classList.add('no-offers-card'); // Optional: for additional styling if needed
+                        noOffersBadge = '<div class="no-offers-badge">No Offers Today</div>';
+                    }
+
                     promoCard.innerHTML = `
+                        ${noOffersBadge}
                         <img src="${shop.logo}" alt="${shop.shopName} Logo" class="w-24 h-24 object-contain mb-4">
                         <h3 class="text-xl font-semibold mb-2">${shop.shopName}</h3>
                         <p class="text-dark-grey text-lg mb-4">${shop.mainPromoTitle}</p>
@@ -941,8 +1012,8 @@
                                       shop.shopName.toLowerCase().includes(searchTerm) ||
                                       shop.mainPromoTitle.toLowerCase().includes(searchTerm) ||
                                       shop.promotions.some(promo =>
-                                          promo.title.toLowerCase().includes(searchTerm) ||
-                                          promo.description.toLowerCase().includes(searchTerm)
+                                          (promo.title && promo.title.toLowerCase().includes(searchTerm)) ||
+                                          (promo.description && promo.description.toLowerCase().includes(searchTerm))
                                       );
 
                 const matchesCategory = activeCategory === 'all' || shop.category === activeCategory;
@@ -950,6 +1021,8 @@
                 return matchesSearch && matchesCategory;
             });
             renderPromotions(filtered);
+            // Optionally scroll to top of content after filter/search
+            // window.scrollTo({ top: promotionsList.offsetTop - fixedHeader.offsetHeight, behavior: 'smooth' });
         }
 
         function handleScroll() {
@@ -957,23 +1030,20 @@
             const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
             if (isMobile) {
-                if (currentScrollTop > lastScrollTop && currentScrollTop > 100) { // Scrolling down and past initial threshold
+                if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
                     fixedHeader.classList.add('header-scrolled');
                     body.classList.add('header-scrolled');
-                } else if (currentScrollTop < lastScrollTop || currentScrollTop < 100) { // Scrolling up or near top
+                } else if (currentScrollTop < lastScrollTop || currentScrollTop < 100) {
                     fixedHeader.classList.remove('header-scrolled');
                     body.classList.remove('header-scrolled');
                 }
             } else {
-                // For desktop, ensure scrolled class is not applied
                 fixedHeader.classList.remove('header-scrolled');
                 body.classList.remove('header-scrolled');
-                // Ensure padding is correct for desktop as well
                 setBodyPadding();
             }
             lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
         }
-
 
         // Event Listeners
         categoryLinks.forEach(link => {
@@ -986,27 +1056,42 @@
         });
 
         searchButton.addEventListener('click', filterAndRender);
+
         dealSearchInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
                 filterAndRender();
             }
+            // Show/hide clear button
+            if (dealSearchInput.value.length > 0) {
+                searchClearButton.style.display = 'block';
+            } else {
+                searchClearButton.style.display = 'none';
+            }
+        });
+
+        // New: Clear search input on 'x' click
+        searchClearButton.addEventListener('click', () => {
+            dealSearchInput.value = '';
+            searchClearButton.style.display = 'none';
+            filterAndRender(); // Re-render with cleared search
         });
 
         window.addEventListener('scroll', handleScroll);
-        // Call on resize to adjust padding-top if switching between mobile/desktop views or reorienting
         window.addEventListener('resize', () => {
-            setBodyPadding(); // Recalculate and set padding
-            handleScroll(); // Adjust header state if needed
+            setBodyPadding();
+            handleScroll();
         });
-
 
         // Initial render on page load
         document.addEventListener('DOMContentLoaded', () => {
-            // Set 'All Deals' as active by default
             document.querySelector('.category-link[data-category="all"]').classList.add('bg-light-grey');
             renderPromotions(promotionsData);
-            setBodyPadding(); // Set initial padding after content load
-            handleScroll(); // Call once on load to set initial state based on scroll position
+            setBodyPadding();
+            handleScroll();
+            // Check initial state of search input for clear button
+            if (dealSearchInput.value.length > 0) {
+                searchClearButton.style.display = 'block';
+            }
         });
     </script>
 </body>

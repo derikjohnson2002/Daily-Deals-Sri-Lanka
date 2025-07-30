@@ -14,6 +14,7 @@
             --color-light-grey: #E0E0E0;
             --color-dark-grey: #555555;
             --color-blue-accent: #007bff;
+            --color-red-error: #dc3545; /* For "No Offers" badge */
         }
 
         .bg-black-pure { background-color: var(--color-black-pure); }
@@ -27,7 +28,6 @@
         body {
             font-family: 'Poppins', sans-serif;
             color: var(--color-black-pure);
-            /* padding-top will be set by JavaScript dynamically */
             transition: padding-top 0.3s ease-in-out;
         }
 
@@ -36,7 +36,7 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            background-color: var(--color-black-pure); /* Ensure background is black */
+            background-color: var(--color-black-pure);
             transition: all 0.3s ease-in-out;
             overflow: hidden;
         }
@@ -68,7 +68,7 @@
         @media (max-width: 768px) {
             .fixed-header.header-scrolled {
                 height: auto;
-                min-height: 60px; /* Minimum height for the entire fixed-header */
+                min-height: 60px;
             }
 
             .fixed-header.header-scrolled header {
@@ -83,7 +83,7 @@
                 font-size: 1.5rem;
             }
 
-            .fixed-header.header-scrolled .relative, /* Search input container */
+            .fixed-header.header-scrolled .search-container, /* Search input container */
             .fixed-header.header-scrolled #searchButton {
                 opacity: 0;
                 height: 0;
@@ -95,7 +95,7 @@
             }
 
             body.header-scrolled {
-                padding-top: 60px !important; /* Important to override dynamic setting */
+                padding-top: 60px !important;
             }
         }
 
@@ -150,8 +150,32 @@
             color: var(--color-blue-accent);
             text-decoration: underline;
         }
-        .promo-card .view-deal-link:hover {
+        .view-deal-link:hover {
             color: var(--color-black-pure);
+        }
+
+        /* Search clear button styles */
+        .search-clear-btn {
+            position: absolute;
+            right: 8px; /* Adjusted to be inside padding of text */
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--color-dark-grey);
+            display: none; /* Hidden by default */
+            z-index: 10;
+        }
+        .search-clear-btn:hover {
+            color: var(--color-black-pure);
+        }
+
+        /* "No Offers" highlighting for outlet page (can be different from main page) */
+        .no-offers-promotion {
+            border: 2px solid var(--color-red-error); /* Red border for individual promo if it has no offers */
+            background-color: rgba(255, 0, 0, 0.05); /* Very light red background */
+        }
+        .no-offers-promotion h3 {
+            color: var(--color-red-error);
         }
 
         /* Basic loading spinner */
@@ -183,15 +207,19 @@
                     </button>
                     <div class="text-2xl font-bold">Outlet Deals</div>
                 </div>
-                <div class="relative w-full md:w-1/3 mt-4 md:mt-0">
+                <div class="relative w-full md:w-1/3 search-container">
                     <input type="text" id="dealSearch" placeholder="Search for deals..."
                            class="w-full p-2 pl-10 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-black-pure">
                     <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
+                    <button id="searchClearButton" class="search-clear-btn">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
                 </div>
-                <button id="searchButton" class="bg-blue-accent text-white-pure px-4 py-2 rounded-lg ml-0 md:ml-4 mt-4 md:mt-0 transition-all-ease">Search</button>
-            </div>
+                <button id="searchButton" class="bg-blue-accent text-white-pure px-4 py-2 rounded-lg ml-2 md:ml-2 mt-4 md:mt-0 transition-all-ease">Search</button> </div>
         </header>
     </div>
 
@@ -211,7 +239,7 @@
     </main>
 
     <footer class="bg-black-pure text-white-pure p-6 text-center mt-8">
-        <p>&copy; 2025 Daily Deals Sri Lanka. All rights reserved.</p>
+        <p>&copy; 2025 Daily Deals Sri Lanka. Created by SPG Holdings. All rights reserved.</p>
     </footer>
 
     <script>
@@ -780,7 +808,7 @@
                 "promotions": [
                     {
                         "id": "up-down-kandy-style",
-                        "title": "New Arrivals Discount",
+                        "title": "No Offers",
                         "description": "Be the first to get 10% off on our latest fashion collection.",
                         "validity": "Limited time",
                         "terms": "Selected items only. In-store only.",
@@ -832,6 +860,7 @@
         const noPromotionsMessage = document.getElementById('no-promotions');
         const dealSearchInput = document.getElementById('dealSearch');
         const searchButton = document.getElementById('searchButton');
+        const searchClearButton = document.getElementById('searchClearButton'); // New
         const fixedHeader = document.querySelector('.fixed-header');
         const body = document.body;
 
@@ -840,10 +869,15 @@
         let lastScrollTop = 0;
 
         function setBodyPadding() {
-            // Get the current computed height of the fixed header
             const headerHeight = fixedHeader.offsetHeight;
-            // Apply this height as padding to the body
             body.style.paddingTop = `${headerHeight}px`;
+        }
+
+        // Helper function to check for "No Offers" in a promotion object
+        function hasNoOffersInPromotion(promo) {
+            const lowerTitle = promo.title ? promo.title.toLowerCase() : '';
+            const lowerDesc = promo.description ? promo.description.toLowerCase() : '';
+            return lowerTitle.includes('no offers') || lowerDesc.includes('no offers');
         }
 
         function getShopIdFromUrl() {
@@ -869,8 +903,8 @@
 
             const filteredPromos = shopData.promotions.filter(promo => {
                 const lowerSearchTerm = searchTerm.toLowerCase();
-                return promo.title.toLowerCase().includes(lowerSearchTerm) ||
-                       promo.description.toLowerCase().includes(lowerSearchTerm) ||
+                return (promo.title && promo.title.toLowerCase().includes(lowerSearchTerm)) ||
+                       (promo.description && promo.description.toLowerCase().includes(lowerSearchTerm)) ||
                        (promo.terms && promo.terms.toLowerCase().includes(lowerSearchTerm)) ||
                        (promo.terms2 && promo.terms2.toLowerCase().includes(lowerSearchTerm));
             });
@@ -884,6 +918,12 @@
             filteredPromos.forEach(promotion => {
                 const promoCard = document.createElement('div');
                 promoCard.className = 'promo-card bg-white-pure p-6 rounded-lg shadow-md transition-all-ease flex flex-col justify-between';
+
+                // Apply "no offers" highlight if this specific promotion says "no offers"
+                if (hasNoOffersInPromotion(promotion)) {
+                    promoCard.classList.add('no-offers-promotion');
+                }
+
                 promoCard.innerHTML = `
                     <h3 class="text-xl font-semibold mb-2">${promotion.title}</h3>
                     <p class="text-dark-grey mb-3">${promotion.description}</p>
@@ -906,18 +946,16 @@
             const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
             if (isMobile) {
-                if (currentScrollTop > lastScrollTop && currentScrollTop > 50) { // Scrolling down and past initial threshold
+                if (currentScrollTop > lastScrollTop && currentScrollTop > 50) {
                     fixedHeader.classList.add('header-scrolled');
                     body.classList.add('header-scrolled');
-                } else if (currentScrollTop < lastScrollTop || currentScrollTop < 50) { // Scrolling up or near top
+                } else if (currentScrollTop < lastScrollTop || currentScrollTop < 50) {
                     fixedHeader.classList.remove('header-scrolled');
                     body.classList.remove('header-scrolled');
                 }
             } else {
-                // For desktop, ensure scrolled class is not applied
                 fixedHeader.classList.remove('header-scrolled');
                 body.classList.remove('header-scrolled');
-                // Ensure padding is correct for desktop as well
                 setBodyPadding();
             }
             lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
@@ -925,16 +963,30 @@
 
         // Event Listeners
         searchButton.addEventListener('click', filterCurrentPromotions);
+
         dealSearchInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
                 filterCurrentPromotions();
             }
+            // Show/hide clear button
+            if (dealSearchInput.value.length > 0) {
+                searchClearButton.style.display = 'block';
+            } else {
+                searchClearButton.style.display = 'none';
+            }
+        });
+
+        // New: Clear search input on 'x' click
+        searchClearButton.addEventListener('click', () => {
+            dealSearchInput.value = '';
+            searchClearButton.style.display = 'none';
+            filterCurrentPromotions(); // Re-render with cleared search
         });
 
         window.addEventListener('scroll', handleScroll);
         window.addEventListener('resize', () => {
-            setBodyPadding(); // Recalculate and set padding
-            handleScroll(); // Adjust header state if needed
+            setBodyPadding();
+            handleScroll();
         });
 
 
@@ -949,8 +1001,12 @@
                 noPromotionsMessage.textContent = "No outlet selected.";
                 noPromotionsMessage.classList.remove('hidden');
             }
-            setBodyPadding(); // Set initial padding after content load
-            handleScroll(); // Call once on load to set initial state
+            setBodyPadding();
+            handleScroll();
+            // Check initial state of search input for clear button
+            if (dealSearchInput.value.length > 0) {
+                searchClearButton.style.display = 'block';
+            }
         });
     </script>
 </body>
