@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Promotions - Daily Deals Sri Lanka</title>
+    <title>Outlet Deals - Daily Deals Sri Lanka</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Inherit custom colors from main page or define them here */
         :root {
@@ -24,8 +25,10 @@
         .text-blue-accent { color: var(--color-blue-accent); }
 
         body {
+            font-family: 'Poppins', sans-serif;
             color: var(--color-black-pure);
-            padding-top: 100px; /* Adjust if your header/nav is different here */
+            /* Default padding for desktop/larger screens */
+            padding-top: 100px; /* Height of the fixed header */
         }
 
         .fixed-header {
@@ -35,10 +38,18 @@
             z-index: 1000;
         }
 
+        /* Mobile-specific adjustments for outlet-promotions */
+        @media (max-width: 768px) {
+            body {
+                /* Adjust padding-top for mobile for this specific page. */
+                padding-top: 150px; /* Fine-tune based on your mobile header height */
+            }
+        }
+
         .deal-grid {
             display: grid;
             gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Corrected minminmax to minmax */
         }
 
         @media (min-width: 768px) {
@@ -60,9 +71,6 @@
             border: 1px solid var(--color-light-grey);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease-in-out;
-            display: flex; /* Ensure logo and text align */
-            flex-direction: column; /* Stack logo on top if preferred, or row for horizontal */
-            align-items: center; /* Center items if column, or vertically if row */
             padding: 1.5rem;
             text-align: center; /* Center text within card */
         }
@@ -76,7 +84,7 @@
             width: 96px; /* 24 Tailwind units */
             height: 96px; /* 24 Tailwind units */
             object-fit: contain;
-            margin-bottom: 1rem; /* Space between logo and text */
+            margin: 0 auto 1rem auto; /* Center image and space below */
         }
 
         .promo-card .promotion-details {
@@ -110,137 +118,745 @@
         }
     </style>
 </head>
-<body class="font-sans bg-white-pure text-black-pure">
+<body class="bg-white-pure">
     <div class="fixed-header">
-        <header class="bg-black-pure text-white-pure p-6 shadow-md" role="banner">
-            <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
-                <div class="text-center md:text-left mb-4 md:mb-0">
-                    <h1 class="text-4xl font-bold mb-1 text-white-pure" id="outletName">Outlet Promotions</h1>
-                    <p class="text-white-pure text-lg" id="outletDescription">Loading specific deals for this outlet...</p>
+        <header class="bg-black-pure text-white-pure p-4 shadow-md">
+            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center">
+                    <button onclick="window.history.back()" class="text-white-pure mr-4 p-2 rounded-full hover:bg-gray-700 transition-all-ease">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                    </button>
+                    <div class="text-2xl font-bold">Outlet Deals</div>
                 </div>
-                <a href="index.html" class="sign-in-btn bg-black-pure text-white-pure hover:bg-light-grey hover:text-black-pure py-2 px-4 rounded-md font-semibold transition-all-ease text-center" role="button">Back to All Deals</a>
+                <div class="relative w-full md:w-1/3 mt-4 md:mt-0">
+                    <input type="text" id="dealSearch" placeholder="Search for deals..."
+                           class="w-full p-2 pl-10 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-black-pure">
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <button id="searchButton" class="bg-blue-accent text-white-pure px-4 py-2 rounded-lg ml-0 md:ml-4 mt-4 md:mt-0 transition-all-ease">Search</button>
             </div>
         </header>
     </div>
 
-    <main class="container mx-auto px-4 py-8" role="main">
-        <div id="promotions-grid" class="deal-grid" aria-live="polite" aria-atomic="true">
-            <div class="col-span-full text-center">
-                <div class="spinner"></div>
-                <p class="text-dark-grey">Fetching promotions...</p>
-            </div>
+    <main class="container mx-auto p-4 md:p-6">
+        <div id="outlet-info" class="bg-white-pure p-6 rounded-lg shadow-lg mb-8 text-center border border-light-grey">
+            <img id="outlet-logo" src="" alt="Outlet Logo" class="w-32 h-32 object-contain mx-auto mb-4">
+            <h1 id="outlet-name" class="text-4xl font-bold mb-2"></h1>
+            <p id="outlet-main-promo" class="text-dark-grey text-xl"></p>
+        </div>
+
+        <section id="promotions-list" class="deal-grid">
+            </section>
+
+        <div id="no-promotions" class="hidden text-center text-dark-grey text-lg py-10">
+            No promotions found for this outlet or search term.
         </div>
     </main>
 
-    <footer class="bg-black-pure text-white-pure p-6 text-center text-sm mt-8" role="contentinfo">
-        <p class="container mx-auto">&copy; 2025 Sri Lanka Deals. All promotions are subject to change by the respective store without notice. Please verify details on the official website before visiting.</p>
+    <footer class="bg-black-pure text-white-pure p-6 text-center mt-8">
+        <p>&copy; 2025 Daily Deals Sri Lanka. All rights reserved.</p>
     </footer>
 
     <script>
-        const OUTLET_NAME_H1 = document.getElementById('outletName');
-        const OUTLET_DESCRIPTION_P = document.getElementById('outletDescription');
-        const PROMOTIONS_GRID = document.getElementById('promotions-grid');
-        const PAGE_TITLE = document.getElementById('pageTitle');
+        const promotionsData = [
+            {
+                "shopId": "pizza-hut",
+                "shopName": "Pizza Hut",
+                "logo": "./images/pizza hut.png",
+                "category": "food",
+                "mainPromoTitle": "Hot Pizza Deals!",
+                "promotions": [
+                    {
+                        "id": "pizza-hut-bogo",
+                        "title": "Cyber Saving Offer 1",
+                        "description": "1x Large Pan Pizza + 1x Medium Pan Pizza + 1x Jumbo Coke JUST FOR 4600/=",
+                        "validity": "Until July 31st, 2025",
+                        "terms": "Purchased Pizzas Should Be From The Delight/Classic/Signature Range.",
+                        "url": "https://www.pizzahut.lk/menu/promo/meal-deal/cyber-savings-1-june-2025"
+                    },
+                    {
+                        "id": "pizza-hut-weekend-combo",
+                        "title": "Cyber Saving Offer 2",
+                        "description": "1x Medium Pan Pizza + 1x Personal Pan Pizza + 2x Pet Cokes JUST FOR 2500/=",
+                        "validity": "Until July 31st, 2025",
+                        "terms": "Purchased Pizzas Should Be From The Delight/Classic/Signature Range.",
+                        "url": "https://www.pizzahut.lk/menu/promo/meal-deal/cyber-savings-2-june-2025"
+                    },
+                    {
+                        "id": "Pizza Hut DON'T COOK TUESDAY!",
+                        "title": "Pizza Hut DON'T COOK TUESDAY!",
+                        "description": "Buy 1 Classic or above range Large Pan Pizza and get 1 FREE Delight Large Pan Pizza.",
+                        "validity": "Only on Tuesdays",
+                        "terms": "Available at all outlets. Check website for details.",
+                        "url": "https://www.pizzahut.lk/menu/promo/meal-deal"
+                    }
+                ]
+            },
+            {
+                "shopId": "kfc",
+                "shopName": "KFC",
+                "logo": "./images/KFC.png",
+                "category": "food",
+                "mainPromoTitle": "Finger Lickin' Good Deals",
+                "promotions": [
+                    {
+                        "id": "Life Time Offer",
+                        "title": "Life Time Offer",
+                        "description": "20% OFF on every Purchase over 2500/= ",
+                        "validity": "Life Time Offer",
+                        "terms": "Cargills Credit Or Debit Card Holders",
+                        "terms2":"Valid Only For Dine In and Take Away",
+                        "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/KFC-Apr-2025-2.jpg"
+                    },
+                    {
+                        "id": "Ultimate Combo 1",
+                        "title": "Ultimate Combo 1",
+                        "description": "4x Crispy Burgers + 8 Drumlets + 1.5L Pepsi  JUST FOR 2990/=.",
+                        "validity": "28th and 29th July",
+                        "terms": "Limited time offer.",
+                        "url": "https://www.kfc.lk/menu/promotions/promtn--others"
+                    },
+                    {
+                        "id": "Ultimate Combo 2",
+                        "title": "Ultimate Combo 2",
+                        "description": "2x Crispy Burgers + 4 Drumlets + 400ml Pepsi  JUST FOR 1590/=",
+                        "validity": "28th and 29th July",
+                        "terms": "Limited time offer.",
+                        "url": "https://www.kfc.lk/menu/promotions/promtn--others"
+                    },
+                    {
+                        "id": "kfc-wednesday",
+                        "title": "Wednesday Treats",
+                        "description": "8PC H&B BKT + 6PC DRUMLETS & 2 PILLAF RICE  JUST FOR 3990/=",
+                        "validity": "Every Wednesday",
+                        "terms": "",
+                        "url": "https://www.kfc.lk/menu/promotions/promtn--others"
+                    },
+                    {
+                        "id": "kfc-Cheesed Kottu",
+                        "title": "KFC Cheesed Kottu",
+                        "description": "Buy 1x KFC Cheese Kottu and Get One Chicken PC FREE!",
+                        "validity": "Valid Only in Selected Outlets",
+                        "terms": "",
+                        "url": "https://www.kfc.lk/menu/promotions/promtn--others"
+                    }
 
-        /**
-         * Gets a URL parameter by name.
-         * @param {string} name - The name of the parameter.
-         * @returns {string|null} The parameter value or null if not found.
-         */
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            const results = regex.exec(location.search);
-            return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+                ]
+            },
+            {
+                "shopId": "land-of-kings",
+                "shopName": "Land of Kings",
+                "logo": "./images/lano of kings.png",
+                "category": "food",
+                "mainPromoTitle": "Exclusive Deals from Land of Kings!",
+                "promotions": [
+                    {
+                        "id": "land-of-kings-couple",
+                        "title": "Couple Offer : Just For 2590/=",
+                        "description": "1x Chicken Kottu Small + 1x chicken Fried rice + 1x Omelete + 2x Pepsi.",
+                        "validity": "Valid till 31st of July",
+                        "terms": "Only for Gay Couples🧐",
+                        "url": "https://landofkingscafe.com/product/couple-offer/"
+                    },
+                    {
+                        "id": "land-of-kings-family",
+                        "title": "Chicken Burger Offer",
+                        "description": "2x Single Chicken Burger + 2x Pepsi 250ml   Just for 2590/=",
+                        "validity": "Valid till 31st of July",
+                        "terms": "T&C apply.",
+                        "url": "https://landofkingscafe.com/product/burger-offer/"
+                    },
+                    {
+                        "id": "land-of-kings-family",
+                        "title": "Rice & Noodles Offer",
+                        "description": "Chicken Fried Rice Large x 1 + Chicken Noodles Large x 1 + Devilled Chicken x 1 + Omelet x 1 + Pepsi x 1L",
+                        "validity": "Valid till 31st of July",
+                        "terms": "T&C apply.",
+                        "url": "https://landofkingscafe.com/product/rice-noodles-offer/"
+                    },
+                    {
+                        "id": "land-of-kings-family",
+                        "title": "Family Feast Combo",
+                        "description": "Large portions for 4-5 people, includes rice, curries, and drinks.",
+                        "validity": "Valid till 31st of July",
+                        "terms": "T&C apply.",
+                        "url": "https://landofkingscafe.com/product/family-offer/"
+                    },
+                    {
+                        "id": "land-of-kings-family",
+                        "title": "Family Feast Combo",
+                        "description": "Large portions for 4-5 people, includes rice, curries, and drinks.",
+                        "validity": "Valid till 31st of July",
+                        "terms": "T&C apply.",
+                        "url": "https://landofkingscafe.com/product/family-deal/"
+                    }
+                ]
+            },
+            {
+                "shopId": "taco-bell",
+                "shopName": "Taco Bell",
+                "logo": "./images/taco bell.png",
+                "category": "food",
+                "mainPromoTitle": "Taco Deals!",
+                "promotions": [
+                    {
+                        "id": "taco-bell-tuesday",
+                        "title": "Bowl’d and Beautiful with the Rice Bowl",
+                        "description": "Buy 2 for just Rs. 990. (Save upto Rs.1100) or Buy 1 for just Rs. 550. (Save upto Rs.500)",
+                        "validity": "Only Today (30th July)",
+                        "terms": "Exclusively for Dine-In. Takeaway available for an additional charge of Rs. 100 per bowl.",
+                        "url": "https://www.facebook.com/tacobellsrilanka/"
+                    },
+                    {
+                        "id": "taco-bell-combo",
+                        "title": "Taco Rush at Taco Bell! Get 50% OFF your total bill!",
+                        "description": "Minimum bill value after discount should be Rs.1000",
+                        "validity": "Only on Sundays from 3pm to 9pm",
+                        "terms": "Available Dine-in | Takeaway",
+                        "url": "https://www.facebook.com/tacobellsrilanka/"
+                    }
+                ]
+            },
+            {
+                "shopId": "subway",
+                "shopName": "Subway",
+                "logo": "./images/subway.png",
+                "category": "food",
+                "mainPromoTitle": "Fresh Subs Daily",
+                "promotions": [
+                    {
+                        "id": "Uber Eats Deals",
+                        "title": "Buy 1 Get 1 Free",
+                        "description": "Buy any sub and get another sub of equal or lesser value free.",
+                        "validity": "Ongoing offer",
+                        "terms": "Uber Eats and Pickme orders only.",
+                        "url": "https://www.facebook.com/SubwaySLanka/"
+                    },
+                    {
+                        "id": "subway-no-offers",
+                        "title": "No Offers",
+                        "description": "Please Visit the nearest Subway outlet for the latest offers or call 0115 730 101.",
+                        "validity": "Valid until July 31st, 2025",
+                        "url": "https://www.facebook.com/SubwaySLanka/"
+                    }
+                ]
+            },
+
+            {
+                "shopId": "burger-king",
+                "shopName": "Burger King",
+                "logo": "./images/bk.png",
+                "category": "food",
+                "mainPromoTitle": "King-Sized Savings!",
+                "promotions": [
+                    {
+                        "id": "burger-king-Epic Combos",
+                        "title": "Epic Combos",
+                        "description": "4x Chili Chicken Cheese Burgers + 2x Small Fries + 4x Regular Drinks + 2x Lawa Cakes for Rs.3140",
+                        "validity": "Everyday",
+                        "terms": "T&C apply.",
+                        "url": "https://burgerking.lk/"
+                    },
+                    {
+                        "id": "burger-king-Epic-Combos",
+                        "title": "Epic Combos",
+                        "description": "4x Spicy Chicken Burgers + 4x Small Fries + 4x Regular Drinks + 2x Lawa Cakes for Rs.4040",
+                        "validity": "Daily, until 11 AM",
+                        "terms": "T&C apply.",
+                        "url": "https://burgerking.lk/"
+                    }
+                ]
+            },
+            {
+                "shopId": "popeyes",
+                "shopName": "Popeyes",
+                "logo": "./images/Popeyes.png",
+                "category": "food",
+                "mainPromoTitle": "Louisiana Fried Chicken Feast",
+                "promotions": [
+                    {
+                        "id": "Sunday Funday",
+                        "title": "Sunday Funday",
+                        "description": "20% OFF for Softlogic One Loyality Customers.",
+                        "validity": "Every Sunday",
+                        "terms": "T&C apply.",
+                        "url": "https://popeyes.com.lk/"
+                    },
+                    {
+                        "id": "Spicy Double Dealr",
+                        "title": "Buy One Get One Free",
+                        "description": "Buy 1 Chicken Burger and get 1 free.",
+                        "validity": "Every Tuesday",
+                        "terms": "T&C apply.",
+                        "url": "https://popeyes.com.lk/"
+                    },
+                    {
+                        "id": "Double Delight",
+                        "title": "Double Delight - 2x For Rs.950",
+                        "description": "2x Poppy Chicken Burgers Or 2x Totilla Chicken Wraps",
+                        "validity": "Limited time offer",
+                        "terms": "T&C apply",
+                        "url": "https://popeyes.com.lk/"
+                    }
+                ]
+            },
+            {
+                "shopId": "dominos-pizza",
+                "shopName": "Domino's Pizza",
+                "logo": "./images/dominos.png",
+                "category": "food",
+                "mainPromoTitle": "Every Day Value Deals!",
+                "promotions": [
+                    {
+                        "id": "dominos-edv",
+                        "title": "Every Day Value (EDV) Deals",
+                        "description": "Buy 2 Large Pan Pizzas and Save upto Rs.2000",
+                        "validity": "Ongoing",
+                        "terms": "Check website for details.",
+                        "url": "https://www.dominos.lk/edv"
+                    },
+                    {
+                        "id": "dominos-edv",
+                        "title": "Every Day Value (EDV) Deals",
+                        "description": "Buy 2 Medium Pan Pizzas and Save upto Rs.1000",
+                        "validity": "Ongoing",
+                        "terms": "Check website for details.",
+                        "url": "https://m.dominoslk.com/edv"
+                    }
+                ]
+            },
+
+            {
+                "shopId": "chinese-dragon-cafe",
+                "shopName": "Chinese Dragon Cafe",
+                "logo": "./images/chinese dragon.png",
+                "category": "food",
+                "mainPromoTitle": "Special Offers at Chinese Dragon Cafe",
+                "promotions": [
+                    {
+                        "id": "chinese-dragon-cyber",
+                        "title": "Dragon Cyber Deal: Order Now!!",
+                        "description": "50% off on Shanghai Chicken rice",
+                        "validity": "Valid till 31st of July",
+                        "terms": "Valid only for online orders.",
+                        "url": "https://www.chinesedragoncafe.com/pages/promotions"
+                    }
+                ]
+            },
+            {
+                "shopId": "burleys",
+                "shopName": "Burleys",
+                "logo": "./images/burleys_logo.png",
+                "category": "food",
+                "mainPromoTitle": "BBQ & More at Burleys",
+                "promotions": [
+                    {
+                        "id": "burleys-bbq-night",
+                        "title": "BBQ Night Specials",
+                        "description": "Indulge in delicious BBQ platters every weekend.",
+                        "validity": "Friday & Saturday nights",
+                        "terms": "Reservations recommended.",
+                        "url": "https://www.facebook.com/burleysfoods/"
+                    }
+                ]
+            },
+            {
+                "shopId": "vitos-pizza",
+                "shopName": "Vito's Pizza",
+                "logo": "./images/vitos pizza.png",
+                "category": "food",
+                "mainPromoTitle": "Weekend Family Pizza Deals",
+                "promotions": [
+                    {
+                        "id": "vitos-family",
+                        "title": "No Offers",
+                        "description": "No Offers",
+                        "validity": "Visit Our Site ",
+                        "url": "https://www.vitopizza.lk/menu.php"
+                    }
+                ]
+            },
+            {
+                "shopId": "almas-restaurant",
+                "shopName": "Almas Restaurant",
+                "logo": "./images/almas_restaurant_logo.png",
+                "category": "food",
+                "mainPromoTitle": "Authentic Dining Experience",
+                "promotions": [
+                    {
+                        "id": "almas-restaurant-family",
+                        "title": "No Offers",
+                        "description": "Please Visit the nearest Al-Maas Restaurant for the latest offers or call 0114 344 303.",
+                        "validity": "11 am to 12 pm daily",
+                        "terms": "T&C apply",
+                        "url": "https://almaas.lk/"
+                    }
+                ]
+            },
+            {
+                "shopId": "elite-indian",
+                "shopName": "Elite Indian",
+                "logo": "./images/elite_indian_logo.png",
+                "category": "food",
+                "mainPromoTitle": "Experience True Indian Flavors",
+                "promotions": [
+                    {
+                        "id": "elite-indian-special",
+                        "title": "No Offers",
+                        "description": "Please Visit the nearest Elite Indian Restaurant for the latest offers or call 0112 552 882.",
+                        "validity": "11 am to 12 pm daily",
+                        "terms": "T&C apply",
+                        "url": "https://www.facebook.com/elitebambalapiti/"
+                    }
+                ]
+            },
+            {
+                "shopId": "odel",
+                "shopName": "Odel",
+                "logo": "./images/aodel.png",
+                "category": "fashion",
+                "mainPromoTitle": "Your Fashion Destination",
+                "promotions": [
+                    {
+                        "id": "odel-seasonal",
+                        "title": "Seasonal Sale",
+                        "description": "Up to 30% off on selected fashion and accessories.",
+                        "validity": "August 1st - 15th, 2025",
+                        "terms": "In-store and online. Terms and conditions apply.",
+                        "url": "https://www.odel.lk/"
+                    },
+                    {
+                        "id": "odel-new-arrivals",
+                        "title": "New Arrivals Discount",
+                        "description": "10% off on all new collection items.",
+                        "validity": "Starts Aug 1, 2025",
+                        "terms": "Valid for loyalty members.",
+                        "url": "https://www.odel.lk/new-arrivals"
+                    }
+                ]
+            },
+            {
+                "shopId": "nolimit",
+                "shopName": "NoLimit",
+                "logo": "./images/anolimit.png",
+                "category": "fashion",
+                "mainPromoTitle": "Fashion Unlimited",
+                "promotions": [
+                    {
+                        "id": "nolimit-new-collection",
+                        "title": "New Collection Discount",
+                        "description": "15% off on all new arrivals for loyalty members.",
+                        "validity": "Entire month of August 2025",
+                        "terms": "Show loyalty card at checkout.",
+                        "url": "https://nolimit.lk/"
+                    }
+                ]
+            },
+            {
+                "shopId": "mimosa",
+                "shopName": "Mimosa",
+                "logo": "./images/amimosa.png",
+                "category": "fashion",
+                "mainPromoTitle": "Kids & School Wear Offers",
+                "promotions": [
+                    {
+                        "id": "mimosa-back-to-school",
+                        "title": "Back to School Offers",
+                        "description": "Special discounts on kids' wear and school uniforms.",
+                        "validity": "Until August 31st, 2025",
+                        "terms": "Selected items only.",
+                        "url": "https://mimosaclothingindia.com/"
+                    }
+                ]
+            },
+            {
+                "shopId": "kelly-felder",
+                "shopName": "Kelly Felder",
+                "logo": "./images/akelly felder.png",
+                "category": "fashion",
+                "mainPromoTitle": "Shop Online & Save!",
+                "promotions": [
+                    {
+                        "id": "kelly-felder-online",
+                        "title": "Exclusive Online Discount",
+                        "description": "20% off your first online order. Use code: KF2025.",
+                        "validity": "Ongoing online offer",
+                        "terms": "New customers only. Excludes sale items.",
+                        "url": "https://kellyfelder.com/"
+                    }
+                ]
+            },
+            {
+                "shopId": "fashion-bug",
+                "shopName": "Fashion Bug",
+                "logo": "./images/afashion bug.png",
+                "category": "fashion",
+                "mainPromoTitle": "Mega Clearance Sale!",
+                "promotions": [
+                    {
+                        "id": "fashion-bug-clearance",
+                        "title": "Mega Clearance Sale",
+                        "description": "Up to 50% off on men's, women's, and kids' clothing.",
+                        "validity": "While stocks last",
+                        "terms": "All outlets participating.",
+                        "url": "https://fashionbug.lk/"
+                    }
+                ]
+            },
+            {
+                "shopId": "cool-planet",
+                "shopName": "Cool Planet",
+                "logo": "./images/acool planet.png",
+                "category": "fashion",
+                "mainPromoTitle": "Mid-Season Fashion & More",
+                "promotions": [
+                    {
+                        "id": "cool-planet-mid-season",
+                        "title": "Mid-Season Extravaganza",
+                        "description": "Great deals on casual wear and accessories.",
+                        "validity": "Until end of July 2025",
+                        "terms": "Selected items.",
+                        "url": "https://www.coolplanet.lk/"
+                    },
+                    {
+                        "id": "cool-planet-kids",
+                        "title": "Kids' Collection Offer",
+                        "description": "Buy 2 get 1 free on kids' apparel.",
+                        "validity": "July 2025",
+                        "terms": "In-store only.",
+                        "url": "https://www.coolplanet.lk/kids"
+                    }
+                ]
+            },
+            {
+                "shopId": "thilakawardhana-textiles",
+                "shopName": "Thilakawardhana Textiles",
+                "logo": "./images/athilaka.png",
+                "category": "fashion",
+                "mainPromoTitle": "Your Occasion Wear Specialist",
+                "promotions": [
+                    {
+                        "id": "thilakawardhana-wedding",
+                        "title": "Wedding & Occasion Wear Discounts",
+                        "description": "Special prices on sarees, national wear, and formal attire.",
+                        "validity": "Limited period",
+                        "terms": "Visit showroom for details.",
+                        "url": "https://thilakawardhana.com/"
+                    }
+                ]
+            },
+            {
+                "shopId": "big-plate",
+                "shopName": "Big Plate",
+                "logo": "./images/big_plate_logo.png",
+                "category": "food",
+                "mainPromoTitle": "Hearty Meals at Big Plate!",
+                "promotions": [
+                    {
+                        "id": "big-plate-express-lunch",
+                        "title": "No Offers",
+                        "description": "Please Visit the nearest Big Plate Restaurant for the latest offers or call 077 779 9400.",
+                        "validity": "11 am to 12 pm daily",
+                        "terms": "T&C apply",
+                        "url": "https://www.facebook.com/Bigplatelk/"
+                    }
+                ]
+            },
+            {
+                "shopId": "street-burger",
+                "shopName": "Street Burger",
+                "logo": "./images/street_burger_logo.png",
+                "category": "food",
+                "mainPromoTitle": "Burgers on the Go!",
+                "promotions": [
+                    {
+                        "id": "street-burger-value",
+                        "title": "No Offers",
+                        "description": "Please Visit the nearest Street Burger Restaurant for the latest offers or call 0112 548 548.",
+                        "validity": "All day, every day",
+                        "terms": "T&C apply",
+                        "url": "https://streetburger.lk/"
+                    }
+                ]
+            },
+            {
+                "shopId": "la-luna",
+                "shopName": "La Luna",
+                "logo": "./images/la_luna_logo.png",
+                "category": "food",
+                "mainPromoTitle": "Cafe Delights at La Luna",
+                "promotions": [
+                    {
+                        "id": "la-luna-cafe-offer",
+                        "title": "No Offers",
+                        "description": "Please Visit the nearest Al-Maas Restaurant for the latest offers or call 0114 344 303.",
+                        "validity": "11 am to 12 pm daily",
+                        "terms": "T&C apply",
+                        "url": "https://www.facebook.com/lalunacolombo/"
+                    }
+                ]
+            },
+            {
+                "shopId": "mc-donalds",
+                "shopName": "McDonald's",
+                "logo": "./images/mcdonalds_logo.png",
+                "category": "food",
+                "mainPromoTitle": "Family Fun with McDonald's!",
+                "promotions": [
+                    {
+                        "id": "mc-donalds-happy-meal",
+                        "title": "Error 404",
+                        "description": "This Franchise is not available in Sri Lanka.",
+                        "validity": "Not Applicable",
+                        "terms": "Not Applicable",
+                        "url": "https://www.mcdonalds.com/us/en-us.html"
+                    }
+                ]
+            },
+
+            {
+                "shopId": "up-down-kandy",
+                "shopName": "Up Down Kandy",
+                "logo": "./images/up_down_kandy_logo.png",
+                "category": "fashion",
+                "mainPromoTitle": "New Fashion in Kandy Style!",
+                "promotions": [
+                    {
+                        "id": "up-down-kandy-style",
+                        "title": "New Arrivals Discount",
+                        "description": "Be the first to get 10% off on our latest fashion collection.",
+                        "validity": "Limited time",
+                        "terms": "Selected items only. In-store only.",
+                        "url": "https://uptownsrilanka.com/"
+                    }
+                ]
+            },
+            {
+                "shopId": "zigzag",
+                "shopName": "Zig Zag",
+                "logo": "./images/zigzag_logo.png",
+                "category": "fashion",
+                "mainPromoTitle": "Exclusive Online Fashion",
+                "promotions": [
+                    {
+                        "id": "zigzag-online-exclusive",
+                        "title": "Online Exclusive Offers",
+                        "description": "Special discounts only available for online purchases.",
+                        "validity": "Ongoing online",
+                        "terms": "Applies to non-sale items.",
+                        "url": "https://zigzag.lk/"
+                    }
+                ]
+            },
+            {
+                "shopId": "adidas",
+                "shopName": "Adidas",
+                "logo": "./images/adidas_logo.png",
+                "category": "fashion",
+                "mainPromoTitle": "Adidas Sportswear Deals!",
+                "promotions": [
+                    {
+                        "id": "adidas-sportswear-sale",
+                        "title": "Sportswear Clearance",
+                        "description": "Huge savings on performance wear, shoes, and accessories.",
+                        "validity": "While stocks last",
+                        "terms": "Selected models and sizes.",
+                        "url": "https://odel.lk/adidas/br/189"
+                    }
+                ]
+            }
+        ];
+
+        const outletInfoDiv = document.getElementById('outlet-info');
+        const outletLogo = document.getElementById('outlet-logo');
+        const outletName = document.getElementById('outlet-name');
+        const outletMainPromo = document.getElementById('outlet-main-promo');
+        const promotionsListDiv = document.getElementById('promotions-list');
+        const noPromotionsMessage = document.getElementById('no-promotions');
+        const dealSearchInput = document.getElementById('dealSearch');
+        const searchButton = document.getElementById('searchButton');
+
+        let currentShopData = null; // Store the data for the currently displayed shop
+
+        function getShopIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('shopId');
         }
 
-        /**
-         * Renders individual promotion cards.
-         * @param {Array<Object>} promotions - Array of promotion objects for the specific outlet.
-         * @param {string} shopName - The name of the shop.
-         * @param {string} shopLogo - The logo URL of the shop.
-         */
-        function renderIndividualPromotions(promotions, shopName, shopLogo) {
-            PROMOTIONS_GRID.innerHTML = ''; // Clear existing content
+        function renderOutletPromotions(shopData, searchTerm = '') {
+            promotionsListDiv.innerHTML = '';
+            noPromotionsMessage.classList.add('hidden');
 
-            if (!promotions || promotions.length === 0) {
-                PROMOTIONS_GRID.innerHTML = `<p class="text-dark-grey col-span-full text-center">No promotions found for ${shopName} at the moment. Please check back later.</p>`;
+            if (!shopData) {
+                outletInfoDiv.classList.add('hidden');
+                noPromotionsMessage.textContent = "Outlet not found.";
+                noPromotionsMessage.classList.remove('hidden');
                 return;
             }
 
-            promotions.forEach(promo => {
-                const card = document.createElement('div');
-                card.className = "promo-card bg-white-pure flex flex-col items-center p-6 border border-light-grey transition-all-ease";
-                card.setAttribute('tabindex', '0');
-                card.setAttribute('role', 'link');
-                card.setAttribute('aria-label', `View ${promo.title} from ${shopName}`);
+            outletInfoDiv.classList.remove('hidden');
+            outletLogo.src = shopData.logo;
+            outletName.textContent = shopData.shopName;
+            outletMainPromo.textContent = shopData.mainPromoTitle;
 
-                card.innerHTML = `
-                    <img src="${shopLogo}" alt="${shopName} Logo" class="restaurant-logo w-24 h-24 object-contain mb-4" loading="lazy">
-                    <div class="promotion-details flex-grow text-center">
-                        <h3 class="text-xl font-bold text-black-pure mb-1">${promo.title}</h3>
-                        <p class="description text-dark-grey mb-1">${promo.description}</p>
-                        <p class="validity text-sm text-black-pure font-medium mb-1">Valid: ${promo.validity}</p>
-                        <p class="terms text-xs text-dark-grey mb-3">Terms: ${promo.terms}</p>
-                        <span class="view-deal-link">View Deal &gt;</span>
-                    </div>
+            const filteredPromos = shopData.promotions.filter(promo => {
+                const lowerSearchTerm = searchTerm.toLowerCase();
+                return promo.title.toLowerCase().includes(lowerSearchTerm) ||
+                       promo.description.toLowerCase().includes(lowerSearchTerm) ||
+                       (promo.terms && promo.terms.toLowerCase().includes(lowerSearchTerm)) ||
+                       (promo.terms2 && promo.terms2.toLowerCase().includes(lowerSearchTerm));
+            });
+
+            if (filteredPromos.length === 0) {
+                noPromotionsMessage.textContent = "No promotions found for this outlet or search term.";
+                noPromotionsMessage.classList.remove('hidden');
+                return;
+            }
+
+            filteredPromos.forEach(promotion => {
+                const promoCard = document.createElement('div');
+                promoCard.className = 'promo-card bg-white-pure p-6 rounded-lg shadow-md transition-all-ease flex flex-col justify-between';
+                promoCard.innerHTML = `
+                    <h3 class="text-xl font-semibold mb-2">${promotion.title}</h3>
+                    <p class="text-dark-grey mb-3">${promotion.description}</p>
+                    <p class="text-sm text-gray-600 mb-1"><strong>Validity:</strong> ${promotion.validity}</p>
+                    ${promotion.terms ? `<p class="text-sm text-gray-600 mb-3"><strong>Terms:</strong> ${promotion.terms}</p>` : ''}
+                    ${promotion.terms2 ? `<p class="text-sm text-gray-600 mb-3"><strong>Terms:</strong> ${promotion.terms2}</p>` : ''}
+                    <a href="${promotion.url}" target="_blank" class="view-deal-link self-start">View Deal</a>
                 `;
-
-                // Add event listeners for click and keyboard interaction
-                card.addEventListener('click', function() {
-                    window.open(promo.url, '_blank');
-                });
-                card.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter' || event.keyCode === 13) {
-                        window.open(promo.url, '_blank');
-                    }
-                });
-
-                PROMOTIONS_GRID.appendChild(card);
+                promotionsListDiv.appendChild(promoCard);
             });
         }
 
-        /**
-         * Fetches all promotions and filters for the specific outlet.
-         */
-        async function loadOutletPromotions() {
-            const shopId = getUrlParameter('shopId');
-
-            if (!shopId) {
-                OUTLET_NAME_H1.textContent = 'Error: Shop Not Found';
-                OUTLET_DESCRIPTION_P.textContent = 'No shop ID provided in the URL.';
-                PROMOTIONS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">Please return to the main deals page.</p>';
-                return;
-            }
-
-            try {
-                const response = await fetch('promotions.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const shopsData = await response.json();
-                const selectedShop = shopsData.find(shop => shop.shopId === shopId);
-
-                if (selectedShop) {
-                    OUTLET_NAME_H1.textContent = `${selectedShop.shopName} Promotions`;
-                    OUTLET_DESCRIPTION_P.textContent = `All current deals from ${selectedShop.shopName}:`;
-                    PAGE_TITLE.textContent = `${selectedShop.shopName} Promotions - Sri Lanka Deals Today`;
-                    renderIndividualPromotions(selectedShop.promotions, selectedShop.shopName, selectedShop.logo);
-                } else {
-                    OUTLET_NAME_H1.textContent = 'Shop Not Found';
-                    OUTLET_DESCRIPTION_P.textContent = `No promotions found for '${shopId}'.`;
-                    PROMOTIONS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">The requested shop could not be found. Please check the URL or return to the main deals page.</p>';
-                }
-            } catch (error) {
-                console.error('Error loading outlet promotions:', error);
-                OUTLET_NAME_H1.textContent = 'Error Loading Promotions';
-                OUTLET_DESCRIPTION_P.textContent = 'Could not load promotions. Please try again later.';
-                PROMOTIONS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">An error occurred while fetching data. Please try again later.</p>';
-            }
+        function filterCurrentPromotions() {
+            const searchTerm = dealSearchInput.value;
+            renderOutletPromotions(currentShopData, searchTerm);
         }
 
-        // Load promotions when the page loads
-        document.addEventListener('DOMContentLoaded', loadOutletPromotions);
+        // Event Listeners
+        searchButton.addEventListener('click', filterCurrentPromotions);
+        dealSearchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                filterCurrentPromotions();
+            }
+        });
+
+        // Load specific outlet promotions on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const shopId = getShopIdFromUrl();
+            if (shopId) {
+                currentShopData = promotionsData.find(shop => shop.shopId === shopId);
+                renderOutletPromotions(currentShopData);
+            } else {
+                outletInfoDiv.classList.add('hidden');
+                noPromotionsMessage.textContent = "No outlet selected.";
+                noPromotionsMessage.classList.remove('hidden');
+            }
+        });
     </script>
 </body>
 </html>
