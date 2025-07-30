@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Promotions - Daily Deals Sri Lanka</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Inherit custom colors from main page or define them here */
+        :root {
+            --color-black-pure: #000000;
+            --color-white-pure: #FFFFFF;
+            --color-light-grey: #E0E0E0;
+            --color-dark-grey: #555555;
+            --color-blue-accent: #007bff;
+        }
+
+        .bg-black-pure { background-color: var(--color-black-pure); }
+        .text-black-pure { color: var(--color-black-pure); }
+        .bg-white-pure { background-color: var(--color-white-pure); }
+        .text-white-pure { color: var(--color-white-pure); }
+        .border-light-grey { border-color: var(--color-light-grey); }
+        .text-dark-grey { color: var(--color-dark-grey); }
+        .text-blue-accent { color: var(--color-blue-accent); }
+
+        body {
+            color: var(--color-black-pure);
+            padding-top: 100px; /* Adjust if your header/nav is different here */
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .deal-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        @media (min-width: 768px) {
+            .deal-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .deal-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Promotion Card Hover Effect (Float + Shadow) */
+        .promo-card {
+            cursor: pointer;
+            border-radius: 0.5rem;
+            border: 1px solid var(--color-light-grey);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            display: flex; /* Ensure logo and text align */
+            flex-direction: column; /* Stack logo on top if preferred, or row for horizontal */
+            align-items: center; /* Center items if column, or vertically if row */
+            padding: 1.5rem;
+            text-align: center; /* Center text within card */
+        }
+        .promo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--color-black-pure);
+        }
+
+        .promo-card img {
+            width: 96px; /* 24 Tailwind units */
+            height: 96px; /* 24 Tailwind units */
+            object-fit: contain;
+            margin-bottom: 1rem; /* Space between logo and text */
+        }
+
+        .promo-card .promotion-details {
+            flex-grow: 1; /* Allow details to take remaining space */
+        }
+        .promo-card .view-deal-link {
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: 600;
+            color: var(--color-blue-accent);
+            text-decoration: underline;
+        }
+        .promo-card .view-deal-link:hover {
+            color: var(--color-black-pure);
+        }
+
+        /* Basic loading spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--color-black-pure);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-white-pure text-black-pure">
+    <div class="fixed-header">
+        <header class="bg-black-pure text-white-pure p-6 shadow-md" role="banner">
+            <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h1 class="text-4xl font-bold mb-1 text-white-pure" id="outletName">Outlet Promotions</h1>
+                    <p class="text-white-pure text-lg" id="outletDescription">Loading specific deals for this outlet...</p>
+                </div>
+                <a href="index.html" class="sign-in-btn bg-black-pure text-white-pure hover:bg-light-grey hover:text-black-pure py-2 px-4 rounded-md font-semibold transition-all-ease text-center" role="button">Back to All Deals</a>
+            </div>
+        </header>
+    </div>
+
+    <main class="container mx-auto px-4 py-8" role="main">
+        <div id="promotions-grid" class="deal-grid" aria-live="polite" aria-atomic="true">
+            <div class="col-span-full text-center">
+                <div class="spinner"></div>
+                <p class="text-dark-grey">Fetching promotions...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-black-pure text-white-pure p-6 text-center text-sm mt-8" role="contentinfo">
+        <p class="container mx-auto">&copy; 2025 Sri Lanka Deals. All promotions are subject to change by the respective store without notice. Please verify details on the official website before visiting.</p>
+    </footer>
+
+    <script>
+        const OUTLET_NAME_H1 = document.getElementById('outletName');
+        const OUTLET_DESCRIPTION_P = document.getElementById('outletDescription');
+        const PROMOTIONS_GRID = document.getElementById('promotions-grid');
+        const PAGE_TITLE = document.getElementById('pageTitle');
+
+        /**
+         * Gets a URL parameter by name.
+         * @param {string} name - The name of the parameter.
+         * @returns {string|null} The parameter value or null if not found.
+         */
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        /**
+         * Renders individual promotion cards.
+         * @param {Array<Object>} promotions - Array of promotion objects for the specific outlet.
+         * @param {string} shopName - The name of the shop.
+         * @param {string} shopLogo - The logo URL of the shop.
+         */
+        function renderIndividualPromotions(promotions, shopName, shopLogo) {
+            PROMOTIONS_GRID.innerHTML = ''; // Clear existing content
+
+            if (!promotions || promotions.length === 0) {
+                PROMOTIONS_GRID.innerHTML = `<p class="text-dark-grey col-span-full text-center">No promotions found for ${shopName} at the moment. Please check back later.</p>`;
+                return;
+            }
+
+            promotions.forEach(promo => {
+                const card = document.createElement('div');
+                card.className = "promo-card bg-white-pure flex flex-col items-center p-6 border border-light-grey transition-all-ease";
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'link');
+                card.setAttribute('aria-label', `View ${promo.title} from ${shopName}`);
+
+                card.innerHTML = `
+                    <img src="${shopLogo}" alt="${shopName} Logo" class="restaurant-logo w-24 h-24 object-contain mb-4" loading="lazy">
+                    <div class="promotion-details flex-grow text-center">
+                        <h3 class="text-xl font-bold text-black-pure mb-1">${promo.title}</h3>
+                        <p class="description text-dark-grey mb-1">${promo.description}</p>
+                        <p class="validity text-sm text-black-pure font-medium mb-1">Valid: ${promo.validity}</p>
+                        <p class="terms text-xs text-dark-grey mb-3">Terms: ${promo.terms}</p>
+                        <span class="view-deal-link">View Deal &gt;</span>
+                    </div>
+                `;
+
+                // Add event listeners for click and keyboard interaction
+                card.addEventListener('click', function() {
+                    window.open(promo.url, '_blank');
+                });
+                card.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' || event.keyCode === 13) {
+                        window.open(promo.url, '_blank');
+                    }
+                });
+
+                PROMOTIONS_GRID.appendChild(card);
+            });
+        }
+
+        /**
+         * Fetches all promotions and filters for the specific outlet.
+         */
+        async function loadOutletPromotions() {
+            const shopId = getUrlParameter('shopId');
+
+            if (!shopId) {
+                OUTLET_NAME_H1.textContent = 'Error: Shop Not Found';
+                OUTLET_DESCRIPTION_P.textContent = 'No shop ID provided in the URL.';
+                PROMOTIONS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">Please return to the main deals page.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch('promotions.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const shopsData = await response.json();
+                const selectedShop = shopsData.find(shop => shop.shopId === shopId);
+
+                if (selectedShop) {
+                    OUTLET_NAME_H1.textContent = `${selectedShop.shopName} Promotions`;
+                    OUTLET_DESCRIPTION_P.textContent = `All current deals from ${selectedShop.shopName}:`;
+                    PAGE_TITLE.textContent = `${selectedShop.shopName} Promotions - Sri Lanka Deals Today`;
+                    renderIndividualPromotions(selectedShop.promotions, selectedShop.shopName, selectedShop.logo);
+                } else {
+                    OUTLET_NAME_H1.textContent = 'Shop Not Found';
+                    OUTLET_DESCRIPTION_P.textContent = `No promotions found for '${shopId}'.`;
+                    PROMOTIONS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">The requested shop could not be found. Please check the URL or return to the main deals page.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading outlet promotions:', error);
+                OUTLET_NAME_H1.textContent = 'Error Loading Promotions';
+                OUTLET_DESCRIPTION_P.textContent = 'Could not load promotions. Please try again later.';
+                PROMOTIONS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">An error occurred while fetching data. Please try again later.</p>';
+            }
+        }
+
+        // Load promotions when the page loads
+        document.addEventListener('DOMContentLoaded', loadOutletPromotions);
+    </script>
+</body>
+</html>

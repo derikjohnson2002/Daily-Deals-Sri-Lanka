@@ -1,0 +1,395 @@
+/* CSS Custom Properties (Your Chosen Color Palette) */
+:root {
+    --charcoal: #264653ff;
+    --persian-green: #2a9d8fff;
+    --saffron: #e9c46aff;
+    --sandy-brown: #f4a261ff;
+    --burnt-sienna: #e76f51ff;
+    --light-grey-bg: #f8f8f8; /* A very light neutral for backgrounds */
+    --white: #ffffff;
+    --dark-text: #333333;
+    --medium-text: #555555;
+
+    /* For fixed header/nav padding */
+    --nav-height: 60px; /* Adjust this if your nav bar height changes */
+}
+
+/* Base HTML and Body styles */
+html {
+    scroll-behavior: smooth; /* Enables smooth scrolling for anchor links */
+    scroll-padding-top: var(--nav-height); /* Prevents content from being hidden behind fixed nav */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--light-grey-bg);
+    color: var(--dark-text);
+    line-height: 1.6;
+}
+
+/* Header styling */
+header {
+    background-color: var(--charcoal);
+    color: var(--white);
+    padding: 1.5rem 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    /* No 'position: fixed;' here, header will scroll normally */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.8rem;
+    letter-spacing: 1px;
+}
+
+header p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    opacity: 0.9;
+    margin-bottom: 25px; /* Add some space below motto */
+}
+
+/* Header actions (search bar and sign in) */
+.header-actions {
+    display: flex;
+    justify-content: center; /* Center the items */
+    align-items: center;
+    gap: 20px; /* Space between search bar and sign-in */
+    margin-top: 20px;
+    padding: 0 20px; /* Add some horizontal padding */
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+}
+
+/* Search Bar Styling */
+.search-bar {
+    display: flex;
+    border-radius: 25px;
+    overflow: hidden; /* Ensures input and button corners are rounded */
+    background-color: var(--white); /* White background for the search bar */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-bar input[type="search"] {
+    border: none;
+    padding: 12px 18px;
+    font-size: 1rem;
+    outline: none; /* Remove outline on focus */
+    flex-grow: 1; /* Allow input to take up available space */
+    min-width: 150px; /* Ensure input field is not too small */
+}
+
+.search-bar button {
+    background-color: var(--saffron); /* Saffron for the search button */
+    color: var(--charcoal); /* Dark text for contrast */
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.search-bar button:hover {
+    background-color: var(--sandy-brown); /* Slightly darker saffron on hover */
+}
+
+/* Sign In Button Styling */
+.sign-in-btn {
+    display: inline-block;
+    background-color: var(--burnt-sienna); /* Burnt Sienna for sign-in button */
+    color: var(--white);
+    padding: 12px 25px;
+    border-radius: 25px; /* Rounded pill shape */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.05rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.sign-in-btn:hover {
+    background-color: var(--sandy-brown); /* Match search button hover */
+    transform: translateY(-2px);
+}
+
+
+/* Main Navigation Bar Styling */
+.main-nav {
+    background-color: var(--persian-green); /* A vibrant color for the nav bar */
+    color: var(--white);
+    padding: 0.5rem 0;
+    position: sticky; /* Makes the nav bar stick to the top when scrolling */
+    top: 0; /* Sticks to the top of the viewport */
+    width: 100%;
+    z-index: 1000; /* Ensures nav bar stays on top of other content */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    min-height: var(--nav-height); /* Set a minimum height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Makes list items display horizontally */
+    gap: 30px; /* Spacing between menu items */
+}
+
+.main-nav ul li a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.main-nav ul li a:hover,
+.main-nav ul li a:focus {
+    background-color: var(--charcoal); /* Darker background on hover/focus */
+    color: var(--saffron); /* Saffron text for highlight */
+}
+
+
+/* Main content area */
+main {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: var(--white);
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+/* Category Title Styling */
+.category-title {
+    text-align: center;
+    margin: 60px 0 40px; /* More space above and below */
+}
+
+.category-title h2 {
+    display: inline-block; /* To allow background color to wrap text */
+    background-color: var(--charcoal); /* Dark background */
+    color: var(--white);
+    padding: 12px 30px;
+    border-radius: 50px; /* Rounded pill shape */
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    margin: 0; /* Remove default margin from h2 */
+}
+
+
+/* General section for categories/stores - keeping 'restaurant-section' for now for simplicity */
+/* You might rename 'restaurant-section' to 'store-section' later if you want to be more generic,
+   and then update all instances in your HTML and CSS. */
+.restaurant-section {
+    margin-bottom: 50px;
+    border-bottom: 2px solid var(--light-grey-bg); /* Subtle separator */
+    padding-bottom: 30px;
+}
+
+.restaurant-section h2 {
+    color: var(--persian-green); /* Use Persian Green for main section headings */
+    font-size: 2.5rem;
+    border-left: 8px solid var(--sandy-brown); /* A bold border for emphasis */
+    padding-left: 15px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+/* Individual promotion card styling */
+.promotion-card {
+    background-color: var(--white);
+    border: 1px solid #e0e0e0; /* A soft border */
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Align items vertically in the middle */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); /* More prominent shadow */
+    transition: transform 0.2s ease-in-out;
+}
+
+.promotion-card:hover {
+    transform: translateY(-5px); /* Subtle lift effect on hover */
+}
+
+.restaurant-logo {
+    width: 100px; /* Adjust logo size */
+    height: 100px;
+    min-width: 100px; /* Ensure it doesn't shrink */
+    margin-right: 25px;
+    object-fit: contain; /* Ensure logo fits without distortion */
+    border-radius: 50%; /* Make logos round */
+    border: 3px solid var(--saffron); /* Saffron border for emphasis */
+    padding: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.promotion-details {
+    flex-grow: 1; /* Allow details to take up remaining space */
+}
+
+.promotion-card h3 {
+    color: var(--charcoal); /* Dark color for promotion titles */
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.promotion-card p {
+    margin: 8px 0;
+    font-size: 1.05rem;
+}
+
+.promotion-card .description {
+    font-style: italic;
+    color: var(--medium-text);
+}
+
+.promotion-card .validity {
+    font-weight: bold;
+    color: var(--persian-green); /* Persian Green for validity dates */
+    font-size: 1.1rem;
+}
+
+.promotion-card .terms {
+    font-size: 0.9rem;
+    color: var(--medium-text);
+    margin-top: 15px;
+}
+
+.view-deal-btn {
+    display: inline-block;
+    background-color: var(--burnt-sienna); /* Burnt Sienna for the primary button */
+    color: var(--white);
+    padding: 12px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.view-deal-btn:hover {
+    background-color: var(--saffron); /* Saffron on hover */
+    color: var(--charcoal); /* Dark text for contrast on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 30px;
+    margin-top: 40px;
+    background-color: var(--charcoal); /* Charcoal for footer */
+    color: var(--white);
+    font-size: 0.9rem;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+/* Basic responsiveness for smaller screens */
+@media (max-width: 768px) {
+    main {
+        margin: 15px auto;
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    header p {
+        font-size: 1rem;
+    }
+
+    .header-actions {
+        flex-direction: column; /* Stack items vertically on small screens */
+        gap: 15px;
+    }
+
+    .search-bar {
+        width: 100%; /* Full width for search bar */
+        max-width: 300px; /* Limit max width for smaller screens */
+    }
+
+    .search-bar input[type="search"] {
+        padding: 10px 15px;
+    }
+
+    .search-bar button {
+        padding: 10px 15px;
+    }
+
+    .sign-in-btn {
+        width: 100%; /* Full width for sign-in button */
+        max-width: 300px; /* Limit max width */
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+
+
+    .main-nav {
+        min-height: auto; /* Allow height to adjust */
+        padding: 10px 0;
+    }
+
+    .main-nav ul {
+        flex-direction: column; /* Stack nav items vertically on small screens */
+        gap: 10px;
+        text-align: center;
+    }
+
+    .main-nav ul li a {
+        padding: 8px 15px;
+        font-size: 1rem;
+    }
+
+    .category-title h2 {
+        font-size: 1.6rem;
+        padding: 10px 20px;
+    }
+
+    .restaurant-section h2 {
+        font-size: 1.8rem;
+        padding-left: 10px;
+    }
+
+    .promotion-card {
+        flex-direction: column; /* Stack logo and details on smaller screens */
+        align-items: flex-start; /* Align content to the left */
+        padding: 20px;
+    }
+
+    .restaurant-logo {
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 80px;
+        height: 80px;
+    }
+
+    .promotion-card h3 {
+        font-size: 1.4rem;
+    }
+
+    .promotion-card p {
+        font-size: 0.9rem;
+    }
+
+    .view-deal-btn {
+        width: 100%; /* Full width button on small screens */
+        text-align: center;
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+}

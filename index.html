@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Lanka Deals Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom Colors: White Canvas Palette */
+        :root {
+            --color-black-pure: #000000;
+            --color-white-pure: #FFFFFF;
+            --color-light-grey: #E0E0E0;
+            --color-dark-grey: #555555;
+            --color-blue-accent: #007bff; /* Added for 'view more' link */
+        }
+
+        .bg-black-pure { background-color: var(--color-black-pure); }
+        .text-black-pure { color: var(--color-black-pure); }
+        .bg-white-pure { background-color: var(--color-white-pure); }
+        .text-white-pure { color: var(--color-white-pure); }
+        .border-light-grey { border-color: var(--color-light-grey); }
+        .text-dark-grey { color: var(--color-dark-grey); }
+        .text-blue-accent { color: var(--color-blue-accent); } /* Added */
+
+        /* General Body Text - Default to pure black for readability on white background */
+        body {
+            color: var(--color-black-pure);
+        }
+
+        /* Fixed Header/Nav specific styles */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        /* Add padding to the body to prevent content from hiding under the fixed header */
+        body {
+            padding-top: 156px; /* Adjust this value based on the total height of your fixed header and nav */
+        }
+
+        /* Make the main-nav sticky to stay below the header */
+        .main-nav {
+            position: sticky;
+            top: 100px; /* This should be the height of your header + any desired gap */
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 200px; /* Example: if header becomes taller on mobile */
+            }
+            .main-nav {
+                top: 170px; /* Example: height of header on mobile */
+            }
+        }
+
+        /* Custom style for the grid container to ensure responsiveness */
+        .deal-grid {
+            display: grid;
+            gap: 1.5rem; /* Gap between grid items (promotion cards) */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        @media (min-width: 768px) {
+            .deal-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .deal-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .category-title {
+            grid-column: 1 / -1;
+        }
+
+        .restaurant-section h2 {
+            display: none;
+        }
+
+        /* --- Hover/Focus Effects --- */
+        .transition-all-ease {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Card for individual promotions or summary cards */
+        .promo-card {
+            cursor: pointer;
+            border-radius: 0.5rem;
+            border: 1px solid var(--color-light-grey);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .promo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--color-black-pure);
+        }
+
+        /* Specific style for "view more" link within summary card */
+        .view-more-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            font-weight: 600;
+            color: var(--color-blue-accent);
+            text-decoration: underline;
+        }
+        .view-more-link:hover {
+            color: var(--color-black-pure);
+        }
+
+        .main-nav ul li a:hover {
+            color: var(--color-black-pure);
+            background-color: var(--color-light-grey);
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            border-radius: 0.25rem;
+        }
+
+        #searchButton:hover,
+        .sign-in-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
+        }
+
+        #dealSearch:focus {
+            outline: none;
+            border-color: var(--color-black-pure);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans bg-white-pure text-black-pure">
+    <div class="fixed-header">
+        <header class="bg-black-pure text-white-pure p-6 shadow-md" role="banner">
+            <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h1 class="text-4xl font-bold mb-1 text-white-pure">Daily Deals Sri Lanka</h1>
+                    <p class="text-white-pure text-lg">Your go-to source for the best food & fashion promotions today!</p>
+                </div>
+
+                <div class="header-actions flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full md:w-auto">
+                    <div class="search-bar flex w-full sm:w-auto" role="search">
+                        <label for="dealSearch" class="sr-only">Search deals</label>
+                        <input type="search" id="dealSearch" placeholder="Search deals..." aria-label="Search deals" class="p-2 rounded-l-md border border-black-pure focus:outline-none focus:ring-2 focus:ring-black-pure flex-grow bg-white-pure text-black-pure transition-all-ease">
+                        <button type="submit" id="searchButton" class="bg-black-pure hover:bg-light-grey text-white-pure p-2 rounded-r-md font-semibold transition-all-ease" aria-label="Search">Search</button>
+                    </div>
+                    <a href="#" class="sign-in-btn bg-black-pure text-white-pure hover:bg-light-grey hover:text-black-pure py-2 px-4 rounded-md font-semibold transition-all-ease text-center" role="button">Sign In / Register</a>
+                </div>
+            </div>
+        </header>
+
+        <nav class="main-nav bg-white-pure text-black-pure p-4 shadow-md" aria-label="Main navigation">
+            <ul class="container mx-auto flex justify-center space-x-6">
+                <li><a href="#food-deals" class="hover:text-dark-grey transition-all-ease text-lg p-2 block">Food Deals</a></li>
+                <li><a href="#fashion-deals" class="hover:text-dark-grey transition-all-ease text-lg p-2 block">Fashion & Clothing</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="container mx-auto px-4 py-8" role="main">
+        <section class="category-title mb-8" id="food-deals" aria-labelledby="food-deals-heading">
+            <h2 class="text-3xl font-bold text-black-pure border-b-2 border-black-pure pb-2" id="food-deals-heading">Food Deals</h2>
+        </section>
+
+        <div id="food-deals-grid" class="deal-grid" aria-live="polite" aria-atomic="true">
+            <p class="text-dark-grey col-span-full text-center" id="food-loading-message">Loading food deals...</p>
+        </div>
+
+        <section class="category-title mb-8 mt-12" id="fashion-deals" aria-labelledby="fashion-deals-heading">
+            <h2 class="text-3xl font-bold text-black-pure border-b-2 border-black-pure pb-2" id="fashion-deals-heading">Fashion & Clothing Deals</h2>
+        </section>
+
+        <div id="fashion-deals-grid" class="deal-grid" aria-live="polite" aria-atomic="true">
+            <p class="text-dark-grey col-span-full text-center" id="fashion-loading-message">Loading fashion & clothing deals...</p>
+        </div>
+    </main>
+
+    <footer class="bg-black-pure text-white-pure p-6 text-center text-sm mt-8" role="contentinfo">
+        <p class="container mx-auto">&copy; 2025 Sri Lanka Deals. All promotions are subject to change by the respective store without notice. Please verify details on the official website before visiting.</p>
+    </footer>
+
+    <script>
+        // DOM Element Constants (for better readability and performance)
+        const DEAL_SEARCH_INPUT = document.getElementById('dealSearch');
+        const SEARCH_BUTTON = document.getElementById('searchButton');
+        const FOOD_DEALS_GRID = document.getElementById('food-deals-grid');
+        const FASHION_DEALS_GRID = document.getElementById('fashion-deals-grid');
+        const FOOD_LOADING_MESSAGE = document.getElementById('food-loading-message');
+        const FASHION_LOADING_MESSAGE = document.getElementById('fashion-loading-message');
+
+        // Data Storage
+        let allShopsData = []; // Now stores array of shop objects
+        let lastFetchedDataString = ''; // For comparison
+
+        // --- Utility Functions ---
+
+        /**
+         * Debounces a function, ensuring it's not called too frequently.
+         * @param {function} func The function to debounce.
+         * @param {number} delay The delay in milliseconds.
+         * @returns {function} The debounced function.
+         */
+        const debounce = (func, delay) => {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        };
+
+        /**
+         * Sets loading messages visible and clears grids.
+         */
+        function showLoadingState() {
+            FOOD_DEALS_GRID.innerHTML = '';
+            FASHION_DEALS_GRID.innerHTML = '';
+            FOOD_LOADING_MESSAGE.textContent = 'Loading food deals...';
+            FASHION_LOADING_MESSAGE.textContent = 'Loading fashion & clothing deals...';
+            FOOD_DEALS_GRID.appendChild(FOOD_LOADING_MESSAGE);
+            FASHION_DEALS_GRID.appendChild(FASHION_LOADING_MESSAGE);
+        }
+
+        /**
+         * Hides loading messages.
+         */
+        function hideLoadingState() {
+            // Check if messages are still attached before trying to remove
+            if (FOOD_LOADING_MESSAGE.parentNode) {
+                FOOD_LOADING_MESSAGE.parentNode.removeChild(FOOD_LOADING_MESSAGE);
+            }
+            if (FASHION_LOADING_MESSAGE.parentNode) {
+                FASHION_LOADING_MESSAGE.parentNode.removeChild(FASHION_LOADING_MESSAGE);
+            }
+        }
+
+        // --- Core Functions ---
+
+        /**
+         * Fetches and displays shop promotions from the JSON file.
+         */
+        async function fetchAndDisplayPromotions() {
+            showLoadingState(); // Show loading state before fetch
+            try {
+                const response = await fetch('promotions.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const shops = await response.json();
+
+                const currentDataString = JSON.stringify(shops);
+
+                if (currentDataString !== lastFetchedDataString) {
+                    allShopsData = shops; // Update the global data
+                    renderShops(allShopsData); // Re-render only if data changed
+                    lastFetchedDataString = currentDataString;
+                    console.log('Promotions updated from JSON.');
+                } else {
+                    console.log('No new promotion data. Skipping re-render.');
+                }
+            } catch (error) {
+                console.error('Error fetching or parsing promotions:', error);
+                FOOD_DEALS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">Could not load food deals. Please try again later.</p>';
+                FASHION_DEALS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">Could not load fashion deals. Please try again later.</p>';
+            } finally {
+                hideLoadingState(); // Always hide loading state after fetch attempt
+            }
+        }
+
+        /**
+         * Renders shop summary cards into the respective grids.
+         * @param {Array<Object>} shopsToRender - Array of shop objects to display.
+         */
+        function renderShops(shopsToRender) {
+            FOOD_DEALS_GRID.innerHTML = ''; // Clear existing content
+            FASHION_DEALS_GRID.innerHTML = ''; // Clear existing content
+
+            if (shopsToRender.length === 0) {
+                FOOD_DEALS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">No deals found matching your search criteria.</p>';
+                FASHION_DEALS_GRID.innerHTML = '';
+                return;
+            }
+
+            let hasFoodDeals = false;
+            let hasFashionDeals = false;
+
+            shopsToRender.forEach(shop => {
+                const isMultiPromo = shop.promotions && shop.promotions.length > 1;
+
+                const card = document.createElement('div');
+                card.className = "promo-card bg-white-pure p-6 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6";
+                card.setAttribute('tabindex', '0'); // Make card focusable
+                card.setAttribute('role', 'article'); // Semantic role for content block
+
+                let cardContent;
+                if (isMultiPromo) {
+                    // Summary card for shops with multiple promotions
+                    card.setAttribute('aria-label', `View all promotions for ${shop.shopName}`);
+                    card.classList.add('multi-promo-summary-card'); // Add a specific class for styling/identification
+
+                    cardContent = `
+                        <img src="${shop.logo}" alt="${shop.shopName} Logo" class="restaurant-logo w-24 h-24 object-contain flex-shrink-0" loading="lazy">
+                        <div class="promotion-details flex-grow text-center sm:text-left">
+                            <h3 class="text-xl font-bold text-black-pure mb-1">${shop.mainPromoTitle || shop.shopName}</h3>
+                            <p class="description text-dark-grey mb-1">Discover multiple amazing offers from ${shop.shopName}.</p>
+                            <a href="outlet-promotions.html?shopId=${shop.shopId}" class="view-more-link" aria-label="Click to view all promotions from ${shop.shopName}">Click here to view more promotions &gt;</a>
+                        </div>
+                    `;
+                } else {
+                    // Direct link card for shops with a single promotion
+                    const promo = shop.promotions[0]; // Get the single promotion
+                    card.setAttribute('data-url', promo.url);
+                    card.setAttribute('aria-label', `View ${shop.shopName} Deal: ${promo.title}`);
+                    card.classList.add('single-promo-card'); // Add a specific class
+
+                    cardContent = `
+                        <img src="${shop.logo}" alt="${shop.shopName} Logo" class="restaurant-logo w-24 h-24 object-contain flex-shrink-0" loading="lazy">
+                        <div class="promotion-details flex-grow text-center sm:text-left">
+                            <h3 class="text-xl font-bold text-black-pure mb-1">${promo.title}</h3>
+                            <p class="description text-dark-grey mb-1">${promo.description}</p>
+                            <p class="validity text-sm text-black-pure font-medium mb-1">Valid: ${promo.validity}</p>
+                            <p class="terms text-xs text-dark-grey mb-3">Terms: ${promo.terms}</p>
+                            <span class="view-more-link" aria-hidden="true">View Deal &gt;</span>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = cardContent;
+
+                // Add event listeners for click and keyboard interaction
+                if (isMultiPromo) {
+                    card.addEventListener('click', function(event) {
+                        // Prevent default if the click was on the link itself,
+                        // otherwise handle the card click.
+                        if (!event.target.closest('.view-more-link')) {
+                             window.location.href = `outlet-promotions.html?shopId=${shop.shopId}`;
+                        }
+                    });
+                    card.addEventListener('keydown', function(event) {
+                        if (event.key === 'Enter' || event.keyCode === 13) {
+                             window.location.href = `outlet-promotions.html?shopId=${shop.shopId}`;
+                        }
+                    });
+                } else {
+                    const promoUrl = shop.promotions[0].url;
+                    card.addEventListener('click', function() {
+                        window.open(promoUrl, '_blank');
+                    });
+                    card.addEventListener('keydown', function(event) {
+                        if (event.key === 'Enter' || event.keyCode === 13) {
+                            window.open(promoUrl, '_blank');
+                        }
+                    });
+                }
+
+
+                // Append the card to the correct category grid
+                if (shop.category === 'food') {
+                    FOOD_DEALS_GRID.appendChild(card);
+                    hasFoodDeals = true;
+                } else if (shop.category === 'fashion') {
+                    FASHION_DEALS_GRID.appendChild(card);
+                    hasFashionDeals = true;
+                }
+            });
+
+            // If a category has no shops after filtering (e.g., search results)
+            if (!hasFoodDeals && DEAL_SEARCH_INPUT.value.trim() !== '') {
+                FOOD_DEALS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">No food deals found matching your search criteria.</p>';
+            } else if (!hasFoodDeals && DEAL_SEARCH_INPUT.value.trim() === '') {
+                FOOD_DEALS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">No food deals available at the moment. Check back soon!</p>';
+            }
+
+            if (!hasFashionDeals && DEAL_SEARCH_INPUT.value.trim() !== '') {
+                FASHION_DEALS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">No fashion deals found matching your search criteria.</p>';
+            } else if (!hasFashionDeals && DEAL_SEARCH_INPUT.value.trim() === '') {
+                FASHION_DEALS_GRID.innerHTML = '<p class="text-dark-grey col-span-full text-center">No fashion deals available at the moment. Check back soon!</p>';
+            }
+        }
+
+
+        // Smooth scrolling for anchor links in the navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Search Functionality (now searches through shop main details and all nested promo details)
+        const performSearch = debounce(() => {
+            const searchTerm = DEAL_SEARCH_INPUT.value.toLowerCase().trim();
+            let filteredShops = [];
+
+            if (searchTerm === '') {
+                filteredShops = allShopsData; // If empty, show all shops
+            } else {
+                filteredShops = allShopsData.filter(shop => {
+                    // Combine relevant shop-level text for searching
+                    let searchableText = `${shop.shopName} ${shop.mainPromoTitle} ${shop.category}`.toLowerCase();
+
+                    // Include all individual promotion details in the search
+                    shop.promotions.forEach(promo => {
+                        searchableText += ` ${promo.title} ${promo.description} ${promo.validity} ${promo.terms}`.toLowerCase();
+                    });
+
+                    return searchableText.includes(searchTerm);
+                });
+            }
+            renderShops(filteredShops); // Re-render the grids with the filtered data
+        }, 300); // Debounce search to avoid excessive calls while typing
+
+        // Attach event listeners for search
+        SEARCH_BUTTON.addEventListener('click', performSearch);
+        DEAL_SEARCH_INPUT.addEventListener('input', performSearch); // Use 'input' for live search
+
+
+        // Initial load of promotions when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAndDisplayPromotions();
+            //setInterval(fetchAndDisplayPromotions, 10000); // Polling every 10 seconds
+        });
+    </script>
+</body>
+</html>
