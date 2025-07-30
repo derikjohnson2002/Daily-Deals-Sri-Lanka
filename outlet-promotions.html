@@ -27,8 +27,7 @@
         body {
             font-family: 'Poppins', sans-serif;
             color: var(--color-black-pure);
-            /* Initial padding for desktop */
-            padding-top: 100px; /* Height of the fixed header */
+            /* padding-top will be set by JavaScript dynamically */
             transition: padding-top 0.3s ease-in-out;
         }
 
@@ -46,12 +45,8 @@
             transition: padding 0.3s ease-in-out;
         }
 
-        /* Default mobile header state */
+        /* Default mobile header state - styles already in place */
         @media (max-width: 768px) {
-            body {
-                padding-top: 150px; /* Initial mobile padding for this page */
-            }
-
             .fixed-header header {
                 flex-direction: column;
                 padding: 1rem;
@@ -77,20 +72,19 @@
             }
 
             .fixed-header.header-scrolled header {
-                padding: 0.5rem 1rem; /* Smaller padding for the black header */
-                flex-direction: row; /* Align items horizontally */
+                padding: 0.5rem 1rem;
+                flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
-                height: 60px; /* Fixed height for the black bar */
+                height: 60px;
             }
 
             .fixed-header.header-scrolled .text-2xl {
-                font-size: 1.5rem; /* Smaller logo text */
+                font-size: 1.5rem;
             }
 
             .fixed-header.header-scrolled .relative, /* Search input container */
             .fixed-header.header-scrolled #searchButton {
-                /* Hide search bar and button */
                 opacity: 0;
                 height: 0;
                 padding: 0;
@@ -101,7 +95,7 @@
             }
 
             body.header-scrolled {
-                padding-top: 60px; /* Adjust body padding to just the height of the black header */
+                padding-top: 60px !important; /* Important to override dynamic setting */
             }
         }
 
@@ -131,7 +125,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease-in-out;
             padding: 1.5rem;
-            text-align: center; /* Center text within card */
+            text-align: center;
         }
         .promo-card:hover {
             transform: translateY(-5px);
@@ -140,14 +134,14 @@
         }
 
         .promo-card img {
-            width: 96px; /* 24 Tailwind units */
-            height: 96px; /* 24 Tailwind units */
+            width: 96px;
+            height: 96px;
             object-fit: contain;
-            margin: 0 auto 1rem auto; /* Center image and space below */
+            margin: 0 auto 1rem auto;
         }
 
         .promo-card .promotion-details {
-            flex-grow: 1; /* Allow details to take remaining space */
+            flex-grow: 1;
         }
         .promo-card .view-deal-link {
             display: inline-block;
@@ -842,8 +836,15 @@
         const body = document.body;
 
 
-        let currentShopData = null; // Store the data for the currently displayed shop
-        let lastScrollTop = 0; // For tracking scroll direction
+        let currentShopData = null;
+        let lastScrollTop = 0;
+
+        function setBodyPadding() {
+            // Get the current computed height of the fixed header
+            const headerHeight = fixedHeader.offsetHeight;
+            // Apply this height as padding to the body
+            body.style.paddingTop = `${headerHeight}px`;
+        }
 
         function getShopIdFromUrl() {
             const params = new URLSearchParams(window.location.search);
@@ -900,7 +901,6 @@
             renderOutletPromotions(currentShopData, searchTerm);
         }
 
-        // Header shrinking/hiding logic for mobile (outlet-promotions.html)
         function handleScroll() {
             const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
             const isMobile = window.matchMedia("(max-width: 768px)").matches;
@@ -917,6 +917,8 @@
                 // For desktop, ensure scrolled class is not applied
                 fixedHeader.classList.remove('header-scrolled');
                 body.classList.remove('header-scrolled');
+                // Ensure padding is correct for desktop as well
+                setBodyPadding();
             }
             lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
         }
@@ -930,7 +932,10 @@
         });
 
         window.addEventListener('scroll', handleScroll);
-        window.addEventListener('resize', handleScroll); // Adjust on resize too
+        window.addEventListener('resize', () => {
+            setBodyPadding(); // Recalculate and set padding
+            handleScroll(); // Adjust header state if needed
+        });
 
 
         // Load specific outlet promotions on page load
@@ -944,6 +949,7 @@
                 noPromotionsMessage.textContent = "No outlet selected.";
                 noPromotionsMessage.classList.remove('hidden');
             }
+            setBodyPadding(); // Set initial padding after content load
             handleScroll(); // Call once on load to set initial state
         });
     </script>
