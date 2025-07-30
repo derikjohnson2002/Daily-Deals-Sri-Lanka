@@ -27,8 +27,9 @@
         body {
             font-family: 'Poppins', sans-serif;
             color: var(--color-black-pure);
-            /* Default padding for desktop/larger screens */
+            /* Initial padding for desktop */
             padding-top: 100px; /* Height of the fixed header */
+            transition: padding-top 0.3s ease-in-out;
         }
 
         .fixed-header {
@@ -36,20 +37,78 @@
             top: 0;
             width: 100%;
             z-index: 1000;
+            background-color: var(--color-black-pure); /* Ensure background is black */
+            transition: all 0.3s ease-in-out;
+            overflow: hidden;
         }
 
-        /* Mobile-specific adjustments for outlet-promotions */
+        .fixed-header header {
+            transition: padding 0.3s ease-in-out;
+        }
+
+        /* Default mobile header state */
         @media (max-width: 768px) {
             body {
-                /* Adjust padding-top for mobile for this specific page. */
-                padding-top: 150px; /* Fine-tune based on your mobile header height */
+                padding-top: 150px; /* Initial mobile padding for this page */
+            }
+
+            .fixed-header header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .fixed-header .header-top > div {
+                margin-bottom: 1rem;
+            }
+
+            .fixed-header .header-top input,
+            .fixed-header .header-top button {
+                width: 100%;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+        }
+
+        /* --- Scrolled State for Mobile (outlet-promotions.html) --- */
+        @media (max-width: 768px) {
+            .fixed-header.header-scrolled {
+                height: auto;
+                min-height: 60px; /* Minimum height for the entire fixed-header */
+            }
+
+            .fixed-header.header-scrolled header {
+                padding: 0.5rem 1rem; /* Smaller padding for the black header */
+                flex-direction: row; /* Align items horizontally */
+                justify-content: space-between;
+                align-items: center;
+                height: 60px; /* Fixed height for the black bar */
+            }
+
+            .fixed-header.header-scrolled .text-2xl {
+                font-size: 1.5rem; /* Smaller logo text */
+            }
+
+            .fixed-header.header-scrolled .relative, /* Search input container */
+            .fixed-header.header-scrolled #searchButton {
+                /* Hide search bar and button */
+                opacity: 0;
+                height: 0;
+                padding: 0;
+                margin: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: all 0.2s ease-in-out;
+            }
+
+            body.header-scrolled {
+                padding-top: 60px; /* Adjust body padding to just the height of the black header */
             }
         }
 
         .deal-grid {
             display: grid;
             gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Corrected minminmax to minmax */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         }
 
         @media (min-width: 768px) {
@@ -121,7 +180,7 @@
 <body class="bg-white-pure">
     <div class="fixed-header">
         <header class="bg-black-pure text-white-pure p-4 shadow-md">
-            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between header-top">
                 <div class="flex items-center">
                     <button onclick="window.history.back()" class="text-white-pure mr-4 p-2 rounded-full hover:bg-gray-700 transition-all-ease">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -779,8 +838,12 @@
         const noPromotionsMessage = document.getElementById('no-promotions');
         const dealSearchInput = document.getElementById('dealSearch');
         const searchButton = document.getElementById('searchButton');
+        const fixedHeader = document.querySelector('.fixed-header');
+        const body = document.body;
+
 
         let currentShopData = null; // Store the data for the currently displayed shop
+        let lastScrollTop = 0; // For tracking scroll direction
 
         function getShopIdFromUrl() {
             const params = new URLSearchParams(window.location.search);
@@ -837,6 +900,27 @@
             renderOutletPromotions(currentShopData, searchTerm);
         }
 
+        // Header shrinking/hiding logic for mobile (outlet-promotions.html)
+        function handleScroll() {
+            const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
+            const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+            if (isMobile) {
+                if (currentScrollTop > lastScrollTop && currentScrollTop > 50) { // Scrolling down and past initial threshold
+                    fixedHeader.classList.add('header-scrolled');
+                    body.classList.add('header-scrolled');
+                } else if (currentScrollTop < lastScrollTop || currentScrollTop < 50) { // Scrolling up or near top
+                    fixedHeader.classList.remove('header-scrolled');
+                    body.classList.remove('header-scrolled');
+                }
+            } else {
+                // For desktop, ensure scrolled class is not applied
+                fixedHeader.classList.remove('header-scrolled');
+                body.classList.remove('header-scrolled');
+            }
+            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+        }
+
         // Event Listeners
         searchButton.addEventListener('click', filterCurrentPromotions);
         dealSearchInput.addEventListener('keyup', (e) => {
@@ -844,6 +928,10 @@
                 filterCurrentPromotions();
             }
         });
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleScroll); // Adjust on resize too
+
 
         // Load specific outlet promotions on page load
         document.addEventListener('DOMContentLoaded', () => {
@@ -856,6 +944,7 @@
                 noPromotionsMessage.textContent = "No outlet selected.";
                 noPromotionsMessage.classList.remove('hidden');
             }
+            handleScroll(); // Call once on load to set initial state
         });
     </script>
 </body>
