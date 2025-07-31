@@ -932,7 +932,7 @@
         const categoryLinks = document.querySelectorAll('.category-link');
         const dealSearchInput = document.getElementById('dealSearch');
         const searchButton = document.getElementById('searchButton');
-        const searchClearButton = document.getElementById('searchClearButton'); // New
+        const searchClearButton = document.getElementById('searchClearButton');
         const fixedHeader = document.querySelector('.fixed-header');
         const body = document.body;
         const mainNav = document.querySelector('.main-nav');
@@ -985,7 +985,7 @@
 
                     let noOffersBadge = '';
                     if (hasNoOffers(shop)) {
-                        promoCard.classList.add('no-offers-card'); // Optional: for additional styling if needed
+                        promoCard.classList.add('no-offers-card');
                         noOffersBadge = '<div class="no-offers-badge">No Offers Today</div>';
                     }
 
@@ -1021,8 +1021,6 @@
                 return matchesSearch && matchesCategory;
             });
             renderPromotions(filtered);
-            // Optionally scroll to top of content after filter/search
-            // window.scrollTo({ top: promotionsList.offsetTop - fixedHeader.offsetHeight, behavior: 'smooth' });
         }
 
         function handleScroll() {
@@ -1069,11 +1067,10 @@
             }
         });
 
-        // New: Clear search input on 'x' click
         searchClearButton.addEventListener('click', () => {
             dealSearchInput.value = '';
             searchClearButton.style.display = 'none';
-            filterAndRender(); // Re-render with cleared search
+            filterAndRender();
         });
 
         window.addEventListener('scroll', handleScroll);

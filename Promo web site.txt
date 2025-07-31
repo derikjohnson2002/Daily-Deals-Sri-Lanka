@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Top Food Promotions</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Daily Food Deals in Colombo!</h1>
+        <nav>
+            <a href="#promotions">View Promotions</a>
+            <a href="#restaurants">Our Restaurants</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="promotions">
+            <h2>Current Hot Deals</h2>
+            <div class="promotion-card">
+                <img src="https://via.placeholder.com/300x200" alt="Promotion Image">
+                <h3>Pizza Hut - Buy One Get One Free!</h3>
+                <p>Enjoy a delicious BOGO offer on Large Pan Pizzas. Valid until July 31st, 2025.</p>
+                <p class="terms">Terms apply. Dine-in and Takeaway only.</p>
+                <a href="https://www.pizzahut.lk/deals" target="_blank" rel="noopener noreferrer">View Details & Order</a>
+            </div>
+
+            <div class="promotion-card">
+                <img src="https://via.placeholder.com/300x200" alt="Promotion Image">
+                <h3>KFC - Zinger Combo Offer!</h3>
+                <p>Get a Zinger burger, fries, and a drink for Rs. 999. Valid until August 5th, 2025.</p>
+                <p class="terms">Available at all KFC outlets in Colombo.</p>
+                <a href="https://www.kfc.lk/menu/deals" target="_blank" rel="noopener noreferrer">View Details & Order</a>
+            </div>
+
+            </section>
+
+        <section id="restaurants">
+            <h2>Our Featured Restaurants</h2>
+            <ul>
+                <li>Pizza Hut</li>
+                <li>KFC</li>
+                <li>Taco Bell</li>
+                <li>Subway</li>
+                <li>Vito's Pizza</li>
+                <li>Burger King</li>
+                <li>Popeyes</li>
+                <li>Dominos</li>
+                <li>Land of Kings</li>
+                <li>Chinese Dragon</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Daily Food Deals. All rights reserved. Promotions are subject to change by restaurants.</p>
+    </footer>
+
+</body>
+</html>

@@ -860,7 +860,7 @@
         const noPromotionsMessage = document.getElementById('no-promotions');
         const dealSearchInput = document.getElementById('dealSearch');
         const searchButton = document.getElementById('searchButton');
-        const searchClearButton = document.getElementById('searchClearButton'); // New
+        const searchClearButton = document.getElementById('searchClearButton');
         const fixedHeader = document.querySelector('.fixed-header');
         const body = document.body;
 
@@ -976,11 +976,10 @@
             }
         });
 
-        // New: Clear search input on 'x' click
         searchClearButton.addEventListener('click', () => {
             dealSearchInput.value = '';
             searchClearButton.style.display = 'none';
-            filterCurrentPromotions(); // Re-render with cleared search
+            filterCurrentPromotions();
         });
 
         window.addEventListener('scroll', handleScroll);
