@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Colors: White Canvas Palette */
+        :root {
+            --color-black-pure: #000000;
+            --color-white-pure: #FFFFFF;
+            --color-light-grey: #E0E0E0;
+            --color-dark-grey: #555555;
+            --color-blue-accent: #007bff;
+            --color-red-error: #dc3545;
+            --color-green-success: #28a745;
+        }
+
+        .bg-black-pure { background-color: var(--color-black-pure); }
+        .text-black-pure { color: var(--color-black-pure); }
+        .bg-white-pure { background-color: var(--color-white-pure); }
+        .text-white-pure { color: var(--color-white-pure); }
+        .border-light-grey { border-color: var(--color-light-grey); }
+        .text-dark-grey { color: var(--color-dark-grey); }
+        .text-blue-accent { color: var(--color-blue-accent); }
+        .bg-red-error { background-color: var(--color-red-error); }
+        .bg-green-success { background-color: var(--color-green-success); }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--color-black-pure);
+            background-color: #f7f7f7;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            background-color: var(--color-white-pure);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-light-grey);
+            border-radius: 0.25rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-black-pure);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-button {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .form-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-black-pure text-white-pure p-4 shadow-md">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold">Add New Shop</h1>
+            <div class="flex space-x-4">
+                <a href="index.html" class="text-white-pure hover:text-light-grey transition-colors">
+                    <button class="px-4 py-2 bg-dark-grey rounded-lg form-button">Back to Home</button>
+                </a>
+                <a href="input.html" class="text-white-pure hover:text-light-grey transition-colors">
+                    <button class="px-4 py-2 bg-dark-grey rounded-lg form-button">Add Promotion</button>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-6">
+        <div class="form-container">
+            <h2 class="text-3xl font-bold mb-6 text-center">Add Shop Details</h2>
+            
+            <form id="addShopForm" class="space-y-6">
+                <div>
+                    <label for="shopName" class="block text-sm font-medium text-dark-grey mb-1">Shop Name</label>
+                    <input type="text" id="shopName" name="shopName" class="form-input" required>
+                </div>
+            
+                <div>
+                    <label for="category" class="block text-sm font-medium text-dark-grey mb-1">Category</label>
+                    <select id="category" name="category" class="form-input" required>
+                        <option value="">-- Select a Category --</option>
+                        <option value="food">Food</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="travel">Travel</option>
+                    </select>
+                </div>
+            
+                <div>
+                    <label for="logoUrl" class="block text-sm font-medium text-dark-grey mb-1">Logo URL (e.g., ./images/newshop.png)</label>
+                    <input type="url" id="logoUrl" name="logoUrl" class="form-input" required>
+                </div>
+
+                <div>
+                    <label for="mainPromoTitle" class="block text-sm font-medium text-dark-grey mb-1">Main Promotion Title</label>
+                    <input type="text" id="mainPromoTitle" name="mainPromoTitle" class="form-input" required>
+                </div>
+
+                <button type="submit" id="submitButton" class="w-full bg-black-pure text-white-pure py-3 rounded-lg font-semibold form-button">
+                    Add New Shop
+                </button>
+            
+                <div id="statusMessage" class="mt-4 text-center text-sm font-medium"></div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-black-pure text-white-pure p-6 text-center mt-8">
+        <p>&copy; 2025 Daily Deals Sri Lanka. Created by SPG Holdings. All rights reserved.</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <script>
+        // --- YOUR FIREBASE CONFIGURATION ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyAQ9sNqKv3yi526mo1zKnXa7egKVLx8m2s",
+          authDomain: "daily-deals-sri-lanka-159d5.firebaseapp.com",
+          projectId: "daily-deals-sri-lanka-159d5",
+          storageBucket: "daily-deals-sri-lanka-159d5.firebasestorage.app",
+          messagingSenderId: "968403926561",
+          appId: "1:968403926561:web:1da8c85bba9902f0126d60",
+          measurementId: "G-EH21K2PCM7"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // --- DOM Elements ---
+        const addShopForm = document.getElementById('addShopForm');
+        const submitButton = document.getElementById('submitButton');
+        const statusMessage = document.getElementById('statusMessage');
+
+        // --- Utility Function to generate a slug from a title ---
+        function slugify(text) {
+            return text.toString().toLowerCase()
+                .trim()
+                .replace(/\s+/g, '-')       // Replace spaces with -
+                .replace(/[^\w-]+/g, '')     // Remove all non-word chars
+                .replace(/--+/g, '-')        // Replace multiple - with single -
+                .substring(0, 50);           // Truncate to a reasonable length
+        }
+
+        // --- Function to handle form submission ---
+        addShopForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitButton.disabled = true;
+            submitButton.textContent = 'Adding...';
+            statusMessage.textContent = '';
+            statusMessage.className = 'mt-4 text-center text-sm font-medium';
+
+            const formData = new FormData(addShopForm);
+            const shopName = formData.get('shopName');
+            const category = formData.get('category');
+            const logoUrl = formData.get('logoUrl');
+            const mainPromoTitle = formData.get('mainPromoTitle');
+
+            // Simple validation
+            if (!shopName || !category || !logoUrl || !mainPromoTitle) {
+                statusMessage.textContent = 'Please fill out all fields.';
+                statusMessage.classList.add('text-red-error');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Add New Shop';
+                return;
+            }
+            
+            const shopId = slugify(shopName);
+
+            const newShop = {
+                shopName: shopName,
+                category: category,
+                logo: logoUrl,
+                mainPromoTitle: mainPromoTitle
+            };
+
+            try {
+                // Get a reference to the shops collection and set a document with the shopId
+                await db.collection('shops').doc(shopId).set(newShop);
+
+                statusMessage.textContent = `Shop "${shopName}" added successfully with ID: ${shopId}.`;
+                statusMessage.classList.add('text-green-success');
+                addShopForm.reset(); // Clear the form
+            } catch (error) {
+                console.error("Error adding shop: ", error);
+                statusMessage.textContent = `Error adding shop: ${error.message}`;
+                statusMessage.classList.add('text-red-error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Add New Shop';
+            }
+        });
+    </script>
+</body>
+</html>

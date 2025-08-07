@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Promotion</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Colors: White Canvas Palette */
+        :root {
+            --color-black-pure: #000000;
+            --color-white-pure: #FFFFFF;
+            --color-light-grey: #E0E0E0;
+            --color-dark-grey: #555555;
+            --color-blue-accent: #007bff;
+            --color-red-error: #dc3545;
+            --color-green-success: #28a745;
+        }
+
+        .bg-black-pure { background-color: var(--color-black-pure); }
+        .text-black-pure { color: var(--color-black-pure); }
+        .bg-white-pure { background-color: var(--color-white-pure); }
+        .text-white-pure { color: var(--color-white-pure); }
+        .border-light-grey { border-color: var(--color-light-grey); }
+        .text-dark-grey { color: var(--color-dark-grey); }
+        .text-blue-accent { color: var(--color-blue-accent); }
+        .bg-red-error { background-color: var(--color-red-error); }
+        .bg-green-success { background-color: var(--color-green-success); }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--color-black-pure);
+            background-color: #f7f7f7;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            background-color: var(--color-white-pure);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-light-grey);
+            border-radius: 0.25rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-black-pure);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-button {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .form-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Basic loading spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--color-black-pure);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="bg-black-pure text-white-pure p-4 shadow-md">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold">Add New Promotion</h1>
+            <a href="index.html" class="text-white-pure hover:text-light-grey transition-colors">
+                <button class="px-4 py-2 bg-dark-grey rounded-lg form-button">Back to Home</button>
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-6">
+        <div class="form-container">
+            <h2 class="text-3xl font-bold mb-6 text-center">Add Promotion Details</h2>
+            
+            <form id="promotionForm" class="space-y-6">
+                <div>
+                    <label for="shopId" class="block text-sm font-medium text-dark-grey mb-1">Select Shop</label>
+                    <div class="relative">
+                        <select id="shopId" name="shopId" class="form-input" required>
+                            <option value="">-- Loading Shops... --</option>
+                        </select>
+                        <div id="shop-loading-spinner" class="spinner absolute right-3 top-1/2 transform -translate-y-1/2" style="display: none;"></div>
+                    </div>
+                </div>
+            
+                <div>
+                    <label for="title" class="block text-sm font-medium text-dark-grey mb-1">Promotion Title</label>
+                    <input type="text" id="title" name="title" class="form-input" required>
+                </div>
+            
+                <div>
+                    <label for="description" class="block text-sm font-medium text-dark-grey mb-1">Description</label>
+                    <textarea id="description" name="description" rows="3" class="form-input" required></textarea>
+                </div>
+            
+                <div>
+                    <label for="validity" class="block text-sm font-medium text-dark-grey mb-1">Validity (e.g., "Ongoing" or "Until 31st Dec")</label>
+                    <input type="text" id="validity" name="validity" class="form-input" required>
+                </div>
+
+                <div>
+                    <label for="terms" class="block text-sm font-medium text-dark-grey mb-1">Terms (Optional)</label>
+                    <input type="text" id="terms" name="terms" class="form-input">
+                </div>
+            
+                <div>
+                    <label for="url" class="block text-sm font-medium text-dark-grey mb-1">Link to Deal (URL)</label>
+                    <input type="url" id="url" name="url" class="form-input" required>
+                </div>
+
+                <button type="submit" id="submitButton" class="w-full bg-black-pure text-white-pure py-3 rounded-lg font-semibold form-button">
+                    Add Promotion
+                </button>
+            
+                <div id="statusMessage" class="mt-4 text-center text-sm font-medium"></div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-black-pure text-white-pure p-6 text-center mt-8">
+        <p>&copy; 2025 Daily Deals Sri Lanka. Created by SPG Holdings. All rights reserved.</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <script>
+        // --- YOUR FIREBASE CONFIGURATION ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyAQ9sNqKv3yi526mo1zKnXa7egKVLx8m2s",
+          authDomain: "daily-deals-sri-lanka-159d5.firebaseapp.com",
+          projectId: "daily-deals-sri-lanka-159d5",
+          storageBucket: "daily-deals-sri-lanka-159d5.firebasestorage.app",
+          messagingSenderId: "968403926561",
+          appId: "1:968403926561:web:1da8c85bba9902f0126d60",
+          measurementId: "G-EH21K2PCM7"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // --- DOM Elements ---
+        const promotionForm = document.getElementById('promotionForm');
+        const shopIdSelect = document.getElementById('shopId');
+        const submitButton = document.getElementById('submitButton');
+        const statusMessage = document.getElementById('statusMessage');
+        const shopLoadingSpinner = document.getElementById('shop-loading-spinner');
+
+        // --- Utility Function to generate a slug from a title ---
+        function slugify(text) {
+            return text.toString().toLowerCase()
+                .trim()
+                .replace(/\s+/g, '-')
+                .replace(/[^\w-]+/g, '')
+                .replace(/--+/g, '-')
+                .substring(0, 50);
+        }
+
+        // --- Function to fetch shops and populate the dropdown ---
+        async function fetchShops() {
+            shopLoadingSpinner.style.display = 'block';
+            shopIdSelect.disabled = true;
+
+            try {
+                const shopsRef = db.collection('shops');
+                const snapshot = await shopsRef.get();
+                
+                shopIdSelect.innerHTML = '<option value="">-- Select a Shop --</option>'; // Clear and add default option
+
+                snapshot.docs.forEach(doc => {
+                    const shop = doc.data();
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = shop.shopName;
+                    shopIdSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching shops:", error);
+                shopIdSelect.innerHTML = '<option value="">-- Failed to load shops --</option>';
+            } finally {
+                shopLoadingSpinner.style.display = 'none';
+                shopIdSelect.disabled = false;
+            }
+        }
+
+        // --- Function to handle form submission ---
+        promotionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitButton.disabled = true;
+            submitButton.textContent = 'Adding...';
+            statusMessage.textContent = '';
+            statusMessage.className = 'mt-4 text-center text-sm font-medium';
+
+            const formData = new FormData(promotionForm);
+            const shopId = formData.get('shopId');
+            const title = formData.get('title');
+            const description = formData.get('description');
+            const validity = formData.get('validity');
+            const terms = formData.get('terms') || null;
+            const url = formData.get('url');
+
+            // Simple validation
+            if (!shopId || !title || !description || !validity || !url) {
+                statusMessage.textContent = 'Please fill out all required fields.';
+                statusMessage.classList.add('text-red-error');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Add Promotion';
+                return;
+            }
+            
+            const newPromotion = {
+                id: `${shopId}-${slugify(title)}`,
+                title: title,
+                description: description,
+                validity: validity,
+                terms: terms,
+                url: url
+            };
+
+            try {
+                // This is the key part: it adds the new promotion to the sub-collection of the selected shop.
+                const promotionsRef = db.collection('shops').doc(shopId).collection('promotions');
+                await promotionsRef.add(newPromotion);
+
+                statusMessage.textContent = `Promotion "${title}" added successfully!`;
+                statusMessage.classList.add('text-green-success');
+                promotionForm.reset();
+            } catch (error) {
+                console.error("Error adding promotion: ", error);
+                statusMessage.textContent = `Error adding promotion: ${error.message}`;
+                statusMessage.classList.add('text-red-error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Add Promotion';
+            }
+        });
+
+        // --- Call fetchShops when the page loads ---
+        document.addEventListener('DOMContentLoaded', fetchShops);
+    </script>
+</body>
+</html>
